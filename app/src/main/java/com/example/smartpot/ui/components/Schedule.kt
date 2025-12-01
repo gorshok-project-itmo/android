@@ -12,14 +12,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.smartpot.data.api.ScheduleItem
+import com.example.smartpot.ui.models.DeviceViewModel
+import com.example.smartpot.ui.models.UiState
 import com.example.smartpot.util.formatDuration
 import java.time.DayOfWeek
 import java.time.Duration
@@ -29,10 +35,12 @@ import java.time.format.FormatStyle
 import java.time.format.TextStyle
 import java.util.Locale
 
-data class ScheduleEntry(val id: Int, val dayOfWeek: DayOfWeek, val time: LocalTime, val duration: Duration)
-
 @Composable
-fun Schedule(entries: List<ScheduleEntry>) {
+fun Schedule(vm: DeviceViewModel) {
+    val deviceId = "1"
+    val uiState: UiState by vm.ui.collectAsState()
+    val deviceState = uiState.devices["1"]!!
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
@@ -48,7 +56,7 @@ fun Schedule(entries: List<ScheduleEntry>) {
         }
 
         Column {
-            for (entry in entries) {
+            for (entry in deviceState.schedule) {
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 6.dp),
@@ -79,6 +87,25 @@ fun Schedule(entries: List<ScheduleEntry>) {
                         )
                     }
                 }
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Button(onClick = {
+                vm.addSchedule(ScheduleItem(
+                    deviceId = deviceId,
+                    time = LocalTime.of(12, 0),
+                    dayOfWeek = DayOfWeek.FRIDAY,
+                    duration = Duration.ofSeconds(120)
+                ))
+            }) {
+                Text("Добавить")
             }
         }
     }

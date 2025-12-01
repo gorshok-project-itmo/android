@@ -6,23 +6,24 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.smartpot.ui.models.DeviceViewModel
 import com.example.smartpot.ui.screens.DeviceListScreen
 import com.example.smartpot.ui.screens.DeviceScreen
 import com.example.smartpot.ui.screens.HomeScreen
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
+fun AppNavHost(navController: NavHostController, vm: DeviceViewModel) {
     NavHost(navController = navController, startDestination = Screen.Device.route, modifier = Modifier.fillMaxSize()) {
         composable(Screen.Home.route) {
-            HomeScreen(navController)
+            HomeScreen(navController, vm)
         }
 
         composable(Screen.DeviceList.route) {
-            DeviceListScreen(navController)
+            DeviceListScreen(navController, vm)
         }
 
         composable(Screen.Device.route) {
-            DeviceScreen(navController)
+            DeviceScreen(navController, vm)
         }
     }
 }

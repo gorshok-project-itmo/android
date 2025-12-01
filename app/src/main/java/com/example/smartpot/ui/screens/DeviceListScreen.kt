@@ -7,9 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.example.smartpot.ui.Screen
 import com.example.smartpot.ui.components.H2
+import com.example.smartpot.ui.models.DeviceViewModel
 
 @Composable
-fun DeviceListScreen(navController: NavController) {
+fun DeviceListScreen(navController: NavController, vm: DeviceViewModel) {
     Column {
         H2("device list h2")
 
