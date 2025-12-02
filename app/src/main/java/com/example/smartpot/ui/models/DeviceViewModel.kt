@@ -2,96 +2,113 @@ package com.example.smartpot.ui.models
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpot.data.api.ScheduleItem
+import com.example.smartpot.data.api.AuthRequest
+import com.example.smartpot.data.api.Device
+import com.example.smartpot.data.api.User
+import com.example.smartpot.data.api.WateringScheduleItem
+import com.example.smartpot.data.api.WateringScheduleRequest
 import com.example.smartpot.data.repository.DeviceRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class UiState(
-    val devices: MutableMap<String, DeviceState> = mutableMapOf("1" to DeviceState("1", "MyDevice1", false, listOf()))
+data class DevicesState(
+    val devices: MutableMap<Int, Device> = mutableMapOf()
 )
 
-data class DeviceState(
-    val id: String,
-    val title: String,
-    val isRunning: Boolean,
-    val schedule: List<ScheduleItem>
+data class WaterScheduleState(
+    val schedule: MutableMap<Int, WateringScheduleItem> = mutableMapOf()
+)
+
+data class UserState(
+    val user: User
 )
 
 class DeviceViewModel(private val repo: DeviceRepository) : ViewModel() {
-    private val _ui = MutableStateFlow(UiState())
-    val ui: StateFlow<UiState> = _ui
+    private val _devices = MutableStateFlow(DevicesState())
+    val devices: StateFlow<DevicesState> = _devices
 
-    fun start(deviceId: String) = viewModelScope.launch {
-        val resp = repo.sendStart(deviceId)
-        if (!resp.success) {
-            return@launch
-        }
+    private val _user = MutableStateFlow(UserState(User(1, "test@test.com")))
+    val user: StateFlow<UserState> = _user
 
-        _ui.update { current ->
-            val old = current.devices[deviceId] ?: return@update current
-            val updated = old.copy(isRunning = true)
-            val newMap = current.devices.toMutableMap().also { it[deviceId] = updated }
-            current.copy(devices = newMap)
+    private val _schedule = MutableStateFlow(WaterScheduleState())
+    val schedule: StateFlow<WaterScheduleState> = _schedule
+
+    fun postSignup(request: AuthRequest) = viewModelScope.launch {
+        val resp = repo.postSignup(request)
+    }
+
+    fun postLogin(request: AuthRequest) = viewModelScope.launch {
+        val resp = repo.postLogin(request)
+    }
+
+    fun deleteLogout() = viewModelScope.launch {
+        val resp = repo.deleteLogout()
+    }
+
+    fun getDevices() = viewModelScope.launch {
+        val resp = repo.getDevices()
+
+        _devices.update { current ->
+            current.copy(devices = resp.associateBy { it.id }.toMutableMap())
         }
     }
 
-    fun stop(deviceId: String) = viewModelScope.launch {
-        val resp = repo.sendStop(deviceId)
-        if (!resp.success) {
-            return@launch
-        }
+    fun getDevice(deviceId: Int) = viewModelScope.launch {
+        val resp = repo.getDevice(deviceId)
 
-        _ui.update { current ->
-            val old = current.devices[deviceId] ?: return@update current
-            val updated = old.copy(isRunning = false)
-            val newMap = current.devices.toMutableMap().also { it[deviceId] = updated }
-            current.copy(devices = newMap)
+        _devices.update { current ->
+            current.copy(current.devices.toMutableMap().also { it.put(resp.id, resp) })
         }
     }
 
-    fun loadSchedules(deviceId: String) = viewModelScope.launch {
-        val resp = repo.fetchSchedules(deviceId)
-        _ui.update { current ->
-            val old = current.devices[deviceId] ?: return@update current
-            val updated = old.copy(schedule = resp.schedule)
-            val newMap = current.devices.toMutableMap().also { it[deviceId] = updated }
-            current.copy(devices = newMap)
+    fun getDeviceWateringStatus(deviceId: Int) = viewModelScope.launch {
+        val resp = repo.getDeviceWateringStatus(deviceId)
+    }
+
+    fun postDeviceTriggerWatering(deviceId: Int) = viewModelScope.launch {
+        val resp = repo.postDeviceTriggerWatering(deviceId)
+    }
+
+    fun getWateringSchedules(deviceId: Int) = viewModelScope.launch {
+        val resp = repo.getWateringSchedules(deviceId)
+
+        _schedule.update { current ->
+            current.copy(resp.associateBy { it.id }.toMutableMap())
         }
     }
 
-    fun addSchedule(item: ScheduleItem) = viewModelScope.launch {
-        val resp = repo.addSchedule(item)
-        val deviceId = item.deviceId
-        _ui.update { current ->
-            val old = current.devices[deviceId] ?: return@update current
-            val updated = old.copy(schedule = resp.schedule)
-            val newMap = current.devices.toMutableMap().also { it[deviceId] = updated }
-            current.copy(devices = newMap)
+    fun postWateringSchedule(request: WateringScheduleRequest) = viewModelScope.launch {
+        val resp = repo.postWateringSchedule(request)
+
+        _schedule.update { current ->
+            val new = current.schedule.toMutableMap().also { it.put(resp.id, resp) }
+            current.copy(new)
         }
     }
 
-    fun updateSchedule(item: ScheduleItem) = viewModelScope.launch {
-        val resp = repo.updateSchedule(item)
-        val deviceId = item.deviceId
-        _ui.update { current ->
-            val old = current.devices[deviceId] ?: return@update current
-            val updated = old.copy(schedule = resp.schedule)
-            val newMap = current.devices.toMutableMap().also { it[deviceId] = updated }
-            current.copy(devices = newMap)
+    fun getWateringSchedule(id: Int) = viewModelScope.launch {
+        val resp = repo.getWateringSchedule(id)
+
+        _schedule.update { current ->
+            current.copy(current.schedule.toMutableMap().also { it.put(resp.id, resp) })
         }
     }
 
-    fun deleteSchedule(item: ScheduleItem) = viewModelScope.launch {
-        val resp = repo.deleteSchedule(item)
-        val deviceId = item.deviceId
-        _ui.update { current ->
-            val old = current.devices[deviceId] ?: return@update current
-            val updated = old.copy(schedule = resp.schedule)
-            val newMap = current.devices.toMutableMap().also { it[deviceId] = updated }
-            current.copy(devices = newMap)
+    fun putWateringSchedule(item: WateringScheduleItem) = viewModelScope.launch {
+        val resp = repo.putWateringSchedule(item)
+
+        _schedule.update { current ->
+            current.copy(current.schedule.toMutableMap().also { it.put(resp.id, resp) })
+        }
+    }
+
+    fun deleteSchedule(id: Int) = viewModelScope.launch {
+        val resp = repo.deleteSchedule(id)
+
+        _schedule.update { current ->
+            current.copy(current.schedule.toMutableMap().also { it.remove(id) })
         }
     }
 }

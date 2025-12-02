@@ -1,18 +1,22 @@
 package com.example.smartpot.data.repository
 
+import com.example.smartpot.data.api.AuthRequest
 import com.example.smartpot.data.api.DeviceApi
-import com.example.smartpot.data.api.DeviceStartRequest
-import com.example.smartpot.data.api.DeviceStopRequest
-import com.example.smartpot.data.api.ScheduleItem
+import com.example.smartpot.data.api.WateringScheduleItem
+import com.example.smartpot.data.api.WateringScheduleRequest
 
 class DeviceRepository(private val api: DeviceApi) {
-    suspend fun sendStart(deviceId: String) = api.postStart(DeviceStartRequest(deviceId))
-    suspend fun sendStop(deviceId: String) = api.postStop(DeviceStopRequest(deviceId))
+    suspend fun postSignup(request: AuthRequest) = api.postSignup(request)
+    suspend fun postLogin(request: AuthRequest) = api.postLogin(request)
+    suspend fun deleteLogout() = api.deleteLogout()
+    suspend fun getDevices() = api.getDevices()
+    suspend fun getDevice(deviceId: Int) = api.getDevice(deviceId)
+    suspend fun getDeviceWateringStatus(deviceId: Int) = api.getDeviceWateringStatus(deviceId)
+    suspend fun postDeviceTriggerWatering(deviceId: Int) = api.postDeviceTriggerWatering(deviceId)
 
-    suspend fun fetchSchedules(deviceId: String) = api.getSchedules(deviceId)
-    suspend fun addSchedule(item: ScheduleItem) = api.addSchedule(item)
-    suspend fun updateSchedule(item: ScheduleItem) = api.updateSchedule(item)
-    suspend fun deleteSchedule(item: ScheduleItem) = api.deleteSchedule(item)
-
-
+    suspend fun getWateringSchedules(deviceId: Int) = api.getWateringSchedules(deviceId)
+    suspend fun postWateringSchedule(request: WateringScheduleRequest) = api.postWateringSchedule(request)
+    suspend fun getWateringSchedule(id: Int) = api.getWateringSchedule(id)
+    suspend fun putWateringSchedule(item: WateringScheduleItem) = api.putWateringSchedule(item)
+    suspend fun deleteSchedule(id: Int) = api.deleteSchedule(id)
 }

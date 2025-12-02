@@ -18,17 +18,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.smartpot.data.api.ScheduleItem
+import com.example.smartpot.data.api.WateringScheduleRequest
 import com.example.smartpot.ui.models.DeviceViewModel
-import com.example.smartpot.ui.models.UiState
-import com.example.smartpot.util.formatDuration
 import java.time.DayOfWeek
-import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -37,9 +33,9 @@ import java.util.Locale
 
 @Composable
 fun Schedule(vm: DeviceViewModel) {
-    val deviceId = "1"
-    val uiState: UiState by vm.ui.collectAsState()
-    val deviceState = uiState.devices["1"]!!
+    val deviceId = 1
+    val scheduleState = vm.schedule.collectAsState()
+    val schedule = scheduleState.value.schedule.filter { it.value.deviceId == deviceId }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -49,14 +45,14 @@ fun Schedule(vm: DeviceViewModel) {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("День", modifier = Modifier.weight(0.25f))
-            Text("Начало", modifier = Modifier.weight(0.35f))
-            Text("Длительность", modifier = Modifier.weight(0.4f))
+            Text("День", modifier = Modifier.weight(0.3f))
+            Text("Начало", modifier = Modifier.weight(0.4f))
+            Text("Конец", modifier = Modifier.weight(0.4f))
             Box(modifier = Modifier.width(48.dp))
         }
 
         Column {
-            for (entry in deviceState.schedule) {
+            for (entry in schedule.values) {
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 6.dp),
@@ -68,11 +64,11 @@ fun Schedule(vm: DeviceViewModel) {
                         modifier = Modifier.weight(0.25f)
                     )
                     Text(
-                        text = entry.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
+                        text = entry.startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
                         modifier = Modifier.weight(0.35f)
                     )
                     Text(
-                        text = formatDuration(entry.duration),
+                        text =  entry.endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
                         modifier = Modifier.weight(0.4f)
                     )
                     IconButton(
@@ -98,11 +94,12 @@ fun Schedule(vm: DeviceViewModel) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Button(onClick = {
-                vm.addSchedule(ScheduleItem(
+                vm.postWateringSchedule(WateringScheduleRequest(
                     deviceId = deviceId,
-                    time = LocalTime.of(12, 0),
+                    startTime = LocalTime.of(12, 0),
                     dayOfWeek = DayOfWeek.FRIDAY,
-                    duration = Duration.ofSeconds(120)
+                    endTime = LocalTime.of(12, 30),
+                    active = true
                 ))
             }) {
                 Text("Добавить")
