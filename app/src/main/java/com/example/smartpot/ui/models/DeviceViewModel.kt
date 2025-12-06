@@ -2,65 +2,37 @@ package com.example.smartpot.ui.models
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpot.data.api.AuthRequest
 import com.example.smartpot.data.api.Device
-import com.example.smartpot.data.api.User
 import com.example.smartpot.data.api.WateringScheduleItem
 import com.example.smartpot.data.api.WateringScheduleRequest
-import com.example.smartpot.data.repository.DeviceRepository
+import com.example.smartpot.data.repository.SmartPotRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-data class DevicesState(
-    val devices: MutableMap<Int, Device> = mutableMapOf()
+data class DeviceState(
+    val device: Device?
 )
 
 data class WaterScheduleState(
     val schedule: MutableMap<Int, WateringScheduleItem> = mutableMapOf()
 )
 
-data class UserState(
-    val user: User
-)
-
-class DeviceViewModel(private val repo: DeviceRepository) : ViewModel() {
-    private val _devices = MutableStateFlow(DevicesState())
-    val devices: StateFlow<DevicesState> = _devices
-
-    private val _user = MutableStateFlow(UserState(User(1, "test@test.com")))
-    val user: StateFlow<UserState> = _user
+@HiltViewModel
+class DeviceViewModel @Inject constructor(private val repo: SmartPotRepository) : ViewModel() {
+    private val _device = MutableStateFlow<DeviceState>(DeviceState(null))
+    val device: StateFlow<DeviceState> = _device
 
     private val _schedule = MutableStateFlow(WaterScheduleState())
     val schedule: StateFlow<WaterScheduleState> = _schedule
 
-    fun postSignup(request: AuthRequest) = viewModelScope.launch {
-        val resp = repo.postSignup(request)
-    }
-
-    fun postLogin(request: AuthRequest) = viewModelScope.launch {
-        val resp = repo.postLogin(request)
-    }
-
-    fun deleteLogout() = viewModelScope.launch {
-        val resp = repo.deleteLogout()
-    }
-
-    fun getDevices() = viewModelScope.launch {
-        val resp = repo.getDevices()
-
-        _devices.update { current ->
-            current.copy(devices = resp.associateBy { it.id }.toMutableMap())
-        }
-    }
-
     fun getDevice(deviceId: Int) = viewModelScope.launch {
         val resp = repo.getDevice(deviceId)
 
-        _devices.update { current ->
-            current.copy(current.devices.toMutableMap().also { it.put(resp.id, resp) })
-        }
+        _device.value = DeviceState(resp)
     }
 
     fun getDeviceWateringStatus(deviceId: Int) = viewModelScope.launch {

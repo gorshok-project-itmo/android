@@ -78,7 +78,7 @@ data class WateringScheduleItem(
     val active: Boolean
 )
 
-interface DeviceApi {
+interface SmartPotApi {
     suspend fun postSignup(request: AuthRequest): AuthResponse
     suspend fun postLogin(request: AuthRequest): AuthResponse
     suspend fun deleteLogout(): LogoutResponse

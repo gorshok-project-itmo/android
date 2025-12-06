@@ -12,55 +12,110 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.smartpot.data.mock.MockDeviceApi
-import com.example.smartpot.data.repository.DeviceRepository
-import com.example.smartpot.ui.AppNavHost
-import com.example.smartpot.ui.models.DeviceViewModel
+import com.example.smartpot.ui.Screen
+import com.example.smartpot.ui.models.LaunchState
+import com.example.smartpot.ui.models.LaunchViewModel
+import com.example.smartpot.ui.screens.DeviceListScreen
+import com.example.smartpot.ui.screens.DeviceScreen
+import com.example.smartpot.ui.screens.HomeScreen
+import com.example.smartpot.ui.screens.LoginScreen
+import com.example.smartpot.ui.screens.SignupScreen
+import com.example.smartpot.ui.screens.SplashScreen
 import com.example.smartpot.ui.theme.SmartPotTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.firstOrNull
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val api = MockDeviceApi()
-        val repo = DeviceRepository(api)
-        val vm = DeviceViewModel(repo)
-
         setContent {
-            App(vm)
+            App()
         }
     }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun App(vm: DeviceViewModel) {
-    val navController = rememberNavController()
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun App() {
+        val navController = rememberNavController()
+        val launchViewModel: LaunchViewModel = hiltViewModel()
 
-    SmartPotTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(title = {
-                    Text("SmartPot")
-                })
-            }
-        ) { innerPadding ->
-            Box(modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-            ) {
-                AppNavHost(navController, vm)
+        LaunchedEffect(launchViewModel) {
+            launchViewModel.state
+                .filter { it !is LaunchState.Loading }
+                .firstOrNull()
+                ?.let { state ->
+                    when (state) {
+                        is LaunchState.SignedIn -> {
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            }
+                        }
+                        is LaunchState.SignedOut -> {
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            }
+                        }
+                        else -> {}
+                    }
+                }
+        }
+
+        SmartPotTheme {
+            Scaffold(
+                topBar = {
+                    TopAppBar(title = {
+                        Text("SmartPot")
+                    })
+                }
+            ) { innerPadding ->
+                Box(modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                ) {
+                    NavHost(navController = navController, startDestination = Screen.Splash.route, modifier = Modifier.fillMaxSize()) {
+                        composable(Screen.Home.route) {
+                            HomeScreen(navController, launchViewModel)
+                        }
+
+                        composable(Screen.DeviceList.route) {
+                            DeviceListScreen(navController)
+                        }
+
+                        composable(Screen.Device.route) {
+                            DeviceScreen(navController)
+                        }
+
+                        composable(Screen.Signup.route) {
+                            SignupScreen(navController)
+                        }
+
+                        composable(Screen.Login.route) {
+                            LoginScreen(navController)
+                        }
+
+                        composable(Screen.Splash.route) {
+                            SplashScreen(navController)
+                        }
+                    }
+                }
             }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-//    App()
+    @Preview(showBackground = true)
+    @Composable
+    fun Preview() {
+
+    }
 }

@@ -1,24 +1,13 @@
-package com.example.smartpot.data.mock
+package com.example.smartpot.data.api
 
-import com.example.smartpot.data.api.AuthRequest
-import com.example.smartpot.data.api.AuthResponse
-import com.example.smartpot.data.api.AuthStatus
-import com.example.smartpot.data.api.Device
-import com.example.smartpot.data.api.DeviceApi
-import com.example.smartpot.data.api.DeviceTriggerWateringResponse
-import com.example.smartpot.data.api.LogoutResponse
-import com.example.smartpot.data.api.User
-import com.example.smartpot.data.api.WateringScheduleItem
-import com.example.smartpot.data.api.WateringScheduleRequest
-import com.example.smartpot.data.api.WateringStatus
 import kotlinx.coroutines.delay
 import java.sql.Timestamp
 import java.time.Instant
 import kotlin.random.Random
 
-class MockDeviceApi(
+class MockSmartPotApi(
     private val delayMs: Long = 200L
-) : DeviceApi {
+) : SmartPotApi {
     private val devices = mutableMapOf<Int, Device>()
     private val schedules = mutableMapOf<Int, WateringScheduleItem>()
     private var token: String? = null
@@ -115,7 +104,7 @@ class MockDeviceApi(
         delay(delayMs)
 
         val item = WateringScheduleItem(
-            id = Random.nextInt(),
+            id = Random.Default.nextInt(),
             deviceId = request.deviceId,
             dayOfWeek = request.dayOfWeek,
             startTime = request.startTime,

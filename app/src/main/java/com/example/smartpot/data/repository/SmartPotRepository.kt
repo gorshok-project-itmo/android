@@ -1,11 +1,11 @@
 package com.example.smartpot.data.repository
 
 import com.example.smartpot.data.api.AuthRequest
-import com.example.smartpot.data.api.DeviceApi
+import com.example.smartpot.data.api.SmartPotApi
 import com.example.smartpot.data.api.WateringScheduleItem
 import com.example.smartpot.data.api.WateringScheduleRequest
 
-class DeviceRepository(private val api: DeviceApi) {
+class SmartPotRepository(private val api: SmartPotApi) {
     suspend fun postSignup(request: AuthRequest) = api.postSignup(request)
     suspend fun postLogin(request: AuthRequest) = api.postLogin(request)
     suspend fun deleteLogout() = api.deleteLogout()
