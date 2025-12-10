@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.Button
@@ -17,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.smartpot.ui.components.Form
 import com.example.smartpot.ui.components.H2
 import com.example.smartpot.ui.models.SignupViewModel
 
@@ -46,54 +49,50 @@ fun SignupScreen(navController: NavController, vm: SignupViewModel = hiltViewMod
     Column {
         H2("Регистрация")
 
-        OutlinedTextField(
-            value = email,
-            onValueChange = vm::onEmailChange,
-            label = { Text("Email") }
-        )
+        Form {
+            OutlinedTextField(
+                value = email,
+                onValueChange = vm::onEmailChange,
+                label = { Text("Email") }
+            )
 
-        Spacer(Modifier.height(8.dp))
+            OutlinedTextField(
+                value = password,
+                onValueChange = vm::onPasswordChange,
+                label = { Text("Пароль") },
+                visualTransformation = PasswordVisualTransformation()
+            )
 
-        OutlinedTextField(
-            value = password,
-            onValueChange = vm::onPasswordChange,
-            label = { Text("Пароль") },
-            visualTransformation = PasswordVisualTransformation()
-        )
+            OutlinedTextField(
+                value = confirmPassword,
+                onValueChange = vm::onConfirmPasswordChange,
+                label = { Text("Подтверждение пароля") },
+                visualTransformation = PasswordVisualTransformation()
+            )
 
-        Spacer(Modifier.height(8.dp))
+            Button(
+                onClick = { vm.signup() },
+                enabled = !loading
+            ) {
+                if (loading) Text("Регистрация...") else Text("Зарегистрироваться")
+            }
 
-        OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = vm::onConfirmPasswordChange,
-            label = { Text("Подтверждение пароля") },
-            visualTransformation = PasswordVisualTransformation()
-        )
+            error?.let {
+                Text(it, color = Color.Red)
+            }
 
-        Spacer(Modifier.height(16.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Уже есть аккаунт?")
 
-        Button(
-            onClick = { vm.signup() },
-            enabled = !loading
-        ) {
-            if (loading) Text("Регистрация...") else Text("Зарегистрироваться")
-        }
+                Spacer(Modifier.width(8.dp))
 
-        Spacer(Modifier.height(8.dp))
-
-        error?.let {
-            Text(it, color = Color.Red)
-        }
-
-        Row {
-            Text("Уже есть аккаунт?")
-
-            Button(onClick = {
-                navController.navigate("login") {
-                    popUpTo("signup") { inclusive = true }
+                Button(onClick = {
+                    navController.navigate("login") {
+                        popUpTo("signup") { inclusive = true }
+                    }
+                }) {
+                    Text("Войти")
                 }
-            }) {
-                Text("Войти")
             }
         }
     }

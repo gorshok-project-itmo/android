@@ -83,7 +83,7 @@ interface SmartPotApi {
     suspend fun postLogin(request: AuthRequest): AuthResponse
     suspend fun deleteLogout(): LogoutResponse
     suspend fun getDevices(): List<Device>
-    suspend fun getDevice(deviceId: Int): Device
+    suspend fun getDevice(deviceId: Int): Device?
     suspend fun getDeviceWateringStatus(deviceId: Int): WateringStatus
     suspend fun postDeviceTriggerWatering(deviceId: Int): DeviceTriggerWateringResponse
 

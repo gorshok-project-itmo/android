@@ -5,9 +5,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.smartpot.ui.components.Controls
 import com.example.smartpot.ui.components.H2
@@ -18,13 +19,30 @@ import com.example.smartpot.ui.components.control.NumberControl
 import com.example.smartpot.ui.models.DeviceViewModel
 
 @Composable
-fun DeviceScreen(navController: NavController, vm: DeviceViewModel = hiltViewModel()) {
+fun DeviceScreen(navController: NavController, deviceId: Int, vm: DeviceViewModel = hiltViewModel()) {
     val scroll = rememberScrollState()
+    val deviceState = vm.device.collectAsState()
+    val device = deviceState.value.device
+
+    LaunchedEffect(vm) {
+        vm.getDevice(deviceId)
+    }
+
+    if (device == null) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scroll)
+        ) {
+            H2("Устройство не найдено")
+        }
+        return
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(scroll)
     ) {
+        H2(deviceState.value.device?.name ?: "")
         H2("Полив")
 
 //        Controls {

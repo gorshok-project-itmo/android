@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartpot.data.api.Auth
 import com.example.smartpot.data.api.AuthRequest
 import com.example.smartpot.data.api.SmartPotApi
+import com.example.smartpot.data.repository.SmartPotRepository
 import com.example.smartpot.data.repository.TokenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val api: SmartPotApi, private val tokenRepo: TokenRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val repo: SmartPotRepository, private val tokenRepo: TokenRepository) : ViewModel() {
     private val _email = mutableStateOf("")
     val email = _email
 
@@ -35,7 +36,7 @@ class LoginViewModel @Inject constructor(private val api: SmartPotApi, private v
     fun onEmailChange(v: String) { _email.value = v }
     fun onPasswordChange(v: String) { _password.value = v }
 
-    fun signup() {
+    fun login() {
         val e = _email.value.trim()
         val p = _password.value
 
@@ -49,7 +50,7 @@ class LoginViewModel @Inject constructor(private val api: SmartPotApi, private v
 
             try {
                 val req = AuthRequest(Auth(e, p))
-                val resp = api.postSignup(req)
+                val resp = repo.postLogin(req)
                 val token = resp.status.token
                 tokenRepo.saveToken(token)
                 _signedInEvent.emit(Unit)

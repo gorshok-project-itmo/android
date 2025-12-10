@@ -3,20 +3,27 @@ package com.example.smartpot.ui
 sealed class Screen(val route: String, val title: String) {
     object Home : Screen("home", "Начало")
     object DeviceList : Screen("device_list", "Список устройств")
-    object Device : Screen("device", "Устройство")
+    object Device : Screen("device/{id}", "Устройство") {
+        fun createRoute(id: Int) = "device/$id"
+    }
     object Signup : Screen("signup", "Регистрация")
     object Login : Screen("login", "Вход")
     object Splash : Screen("splash", "Загрузка")
 }
 
-fun getScreen(route: String?) =
-    when (route) {
-        "home" -> Screen.Home
-        "device_list" -> Screen.DeviceList
-        "device" -> Screen.Device
-        "signup" -> Screen.Signup
-        "login" -> Screen.Login
-        "splash" -> Screen.Splash
+fun getScreen(route: String?): Screen {
+    if (route == null) {
+        return Screen.Home
+    }
+
+    return when {
+        route == "home" -> Screen.Home
+        route == "device_list" -> Screen.DeviceList
+        route.startsWith("device") -> Screen.Device
+        route == "signup" -> Screen.Signup
+        route == "login" -> Screen.Login
+        route == "splash" -> Screen.Splash
 
         else -> Screen.Home
     }
+}

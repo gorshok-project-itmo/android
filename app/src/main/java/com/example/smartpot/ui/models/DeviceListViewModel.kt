@@ -20,9 +20,6 @@ class DeviceListViewModel @Inject constructor(private val repo: SmartPotReposito
     private val _devices = MutableStateFlow(DevicesState())
     val devices: StateFlow<DevicesState> = _devices
 
-    private val _schedule = MutableStateFlow(WaterScheduleState())
-    val schedule: StateFlow<WaterScheduleState> = _schedule
-
     fun getDevices() = viewModelScope.launch {
         val resp = repo.getDevices()
 

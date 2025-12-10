@@ -33,9 +33,8 @@ import java.util.Locale
 
 @Composable
 fun Schedule(vm: DeviceViewModel) {
-    val deviceId = 1
     val scheduleState = vm.schedule.collectAsState()
-    val schedule = scheduleState.value.schedule.filter { it.value.deviceId == deviceId }
+    val schedule = scheduleState.value.schedule
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -94,13 +93,11 @@ fun Schedule(vm: DeviceViewModel) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Button(onClick = {
-                vm.postWateringSchedule(WateringScheduleRequest(
-                    deviceId = deviceId,
-                    startTime = LocalTime.of(12, 0),
-                    dayOfWeek = DayOfWeek.FRIDAY,
-                    endTime = LocalTime.of(12, 30),
-                    active = true
-                ))
+                vm.postWateringSchedule(
+                    startTime = LocalTime.of(15, 0),
+                    endTime = LocalTime.of(15, 15),
+                    dayOfWeek = DayOfWeek.FRIDAY
+                )
             }) {
                 Text("Добавить")
             }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -13,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -20,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.smartpot.ui.components.Form
 import com.example.smartpot.ui.components.H2
 import com.example.smartpot.ui.models.LoginViewModel
 import com.example.smartpot.ui.models.SignupViewModel
@@ -42,45 +45,43 @@ fun LoginScreen(navController: NavController, vm: LoginViewModel = hiltViewModel
     Column {
         H2("Вход")
 
-        OutlinedTextField(
-            value = email,
-            onValueChange = vm::onEmailChange,
-            label = { Text("Email") }
-        )
+        Form {
+            OutlinedTextField(
+                value = email,
+                onValueChange = vm::onEmailChange,
+                label = { Text("Email") }
+            )
 
-        Spacer(Modifier.height(8.dp))
+            OutlinedTextField(
+                value = password,
+                onValueChange = vm::onPasswordChange,
+                label = { Text("Пароль") },
+                visualTransformation = PasswordVisualTransformation()
+            )
 
-        OutlinedTextField(
-            value = password,
-            onValueChange = vm::onPasswordChange,
-            label = { Text("Пароль") },
-            visualTransformation = PasswordVisualTransformation()
-        )
+            Button(
+                onClick = { vm.login() },
+                enabled = !loading
+            ) {
+                if (loading) Text("Вход...") else Text("Войти")
+            }
 
-        Spacer(Modifier.height(16.dp))
+            error?.let {
+                Text(it, color = Color.Red)
+            }
 
-        Button(
-            onClick = { vm.signup() },
-            enabled = !loading
-        ) {
-            if (loading) Text("Вход...") else Text("Войти")
-        }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Ещё нет аккаунта?")
 
-        Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.width(8.dp))
 
-        error?.let {
-            Text(it, color = Color.Red)
-        }
-
-        Row {
-            Text("Ещё нет аккаунта?")
-
-            Button(onClick = {
-                navController.navigate("signup") {
-                    popUpTo("login") { inclusive = true }
+                Button(onClick = {
+                    navController.navigate("signup") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                }) {
+                    Text("Зарегистрироваться")
                 }
-            }) {
-                Text("Зарегистрироваться")
             }
         }
     }

@@ -8,7 +8,18 @@ import kotlin.random.Random
 class MockSmartPotApi(
     private val delayMs: Long = 200L
 ) : SmartPotApi {
-    private val devices = mutableMapOf<Int, Device>()
+    private val devices = mutableMapOf<Int, Device>(1 to Device(
+        id = 1,
+        name = "MyDevice1",
+        mode = "schedule",
+        intervalHours = 5,
+        durationMinutes = 30,
+        humidityThreshold = 0.3,
+        waterLevel = 1.0,
+        userId = 99,
+        createdAt = "",
+        updatedAt = ""
+    ))
     private val schedules = mutableMapOf<Int, WateringScheduleItem>()
     private var token: String? = null
 
@@ -67,9 +78,9 @@ class MockSmartPotApi(
         return this.devices.values.toList()
     }
 
-    override suspend fun getDevice(deviceId: Int): Device {
+    override suspend fun getDevice(deviceId: Int): Device? {
         delay(delayMs)
-        return this.devices[deviceId]!!
+        return this.devices[deviceId]
     }
 
     override suspend fun getDeviceWateringStatus(deviceId: Int): WateringStatus {

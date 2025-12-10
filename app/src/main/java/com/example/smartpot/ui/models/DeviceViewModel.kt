@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
+import java.time.LocalTime
 import javax.inject.Inject
 
 data class DeviceState(
@@ -23,7 +25,7 @@ data class WaterScheduleState(
 
 @HiltViewModel
 class DeviceViewModel @Inject constructor(private val repo: SmartPotRepository) : ViewModel() {
-    private val _device = MutableStateFlow<DeviceState>(DeviceState(null))
+    private val _device = MutableStateFlow(DeviceState(null))
     val device: StateFlow<DeviceState> = _device
 
     private val _schedule = MutableStateFlow(WaterScheduleState())
@@ -51,8 +53,16 @@ class DeviceViewModel @Inject constructor(private val repo: SmartPotRepository) 
         }
     }
 
-    fun postWateringSchedule(request: WateringScheduleRequest) = viewModelScope.launch {
-        val resp = repo.postWateringSchedule(request)
+    fun postWateringSchedule(startTime: LocalTime, endTime: LocalTime, dayOfWeek: DayOfWeek) = viewModelScope.launch {
+        val device = _device.value.device ?: return@launch
+
+        val resp = repo.postWateringSchedule(WateringScheduleRequest(
+            deviceId = device.id,
+            startTime = startTime,
+            endTime = endTime,
+            dayOfWeek = dayOfWeek,
+            active = true
+        ))
 
         _schedule.update { current ->
             val new = current.schedule.toMutableMap().also { it.put(resp.id, resp) }

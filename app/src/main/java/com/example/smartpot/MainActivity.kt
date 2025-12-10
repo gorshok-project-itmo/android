@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                 ?.let { state ->
                     when (state) {
                         is LaunchState.SignedIn -> {
-                            navController.navigate(Screen.Home.route) {
+                            navController.navigate(Screen.DeviceList.route) {
                                 popUpTo(navController.graph.startDestinationId) { inclusive = true }
                             }
                         }
@@ -92,8 +92,10 @@ class MainActivity : ComponentActivity() {
                             DeviceListScreen(navController)
                         }
 
-                        composable(Screen.Device.route) {
-                            DeviceScreen(navController)
+                        composable(Screen.Device.route) { backStackEntry ->
+                            val idArg = backStackEntry.arguments?.getString("id")
+                            val id = idArg?.toIntOrNull() ?: -1
+                            DeviceScreen(navController, id)
                         }
 
                         composable(Screen.Signup.route) {
