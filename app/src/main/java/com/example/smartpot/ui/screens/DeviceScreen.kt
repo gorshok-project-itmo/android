@@ -30,6 +30,7 @@ fun DeviceScreen(navController: NavController, deviceId: Int, vm: DeviceViewMode
 
     LaunchedEffect(vm) {
         vm.getDevice(deviceId)
+        vm.getWateringSchedules(deviceId)
     }
 
     Column(modifier = Modifier
@@ -98,6 +99,7 @@ fun DeviceScreen(navController: NavController, deviceId: Int, vm: DeviceViewMode
             )
         }
 
+        H2("Расписание")
         Schedule(vm)
     }
 }

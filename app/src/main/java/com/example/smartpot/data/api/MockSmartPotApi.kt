@@ -122,8 +122,10 @@ class MockSmartPotApi(
     override suspend fun postWateringSchedule(request: WateringScheduleRequest): WateringScheduleItem {
         delay(delayMs)
 
+        val id = Random.Default.nextInt()
+
         val item = WateringScheduleItem(
-            id = Random.Default.nextInt(),
+            id = id,
             deviceId = request.deviceId,
             dayOfWeek = request.dayOfWeek,
             startTime = request.startTime,
@@ -131,21 +133,18 @@ class MockSmartPotApi(
             active = request.active
         )
 
-        schedules.getOrPut(item.deviceId) { item }
+        schedules[id] = item
         return item
     }
 
     override suspend fun getWateringSchedule(id: Int): WateringScheduleItem {
-        val item = schedules.filter {
-            it.value.id == id
-        }[0]!!
-
+        val item = schedules[id]!!
         return item
     }
 
     override suspend fun putWateringSchedule(item: WateringScheduleItem): WateringScheduleItem {
         delay(delayMs)
-        schedules.getOrPut(item.deviceId) { item }
+        schedules[item.id] = item
         return item
     }
 

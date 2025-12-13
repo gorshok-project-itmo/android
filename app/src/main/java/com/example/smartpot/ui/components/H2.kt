@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 fun H2(text: String) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(
-            top = 24.dp,
+            top = 32.dp,
             start = 16.dp,
             bottom = 4.dp,
             end = 16.dp,

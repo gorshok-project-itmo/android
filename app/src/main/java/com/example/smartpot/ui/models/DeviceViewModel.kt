@@ -59,8 +59,8 @@ class DeviceViewModel @Inject constructor(private val repo: SmartPotRepository) 
         val resp = repo.postDeviceTriggerWatering(device.value.device!!.id)
     }
 
-    fun getWateringSchedules() = viewModelScope.launch {
-        val resp = repo.getWateringSchedules(device.value.device!!.id)
+    fun getWateringSchedules(deviceId: Int) = viewModelScope.launch {
+        val resp = repo.getWateringSchedules(deviceId)
 
         _schedule.update { current ->
             current.copy(resp.associateBy { it.id }.toMutableMap())
