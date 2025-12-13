@@ -23,17 +23,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 
 @Composable
-fun TextControl(title: String, value: String, onValueChange: (String) -> Unit) {
+fun IntControl(title: String, unit: String, value: Int, onValueChange: (Int) -> Unit) {
     var showPopup by remember { mutableStateOf(false) }
 
     Row(
@@ -44,7 +46,7 @@ fun TextControl(title: String, value: String, onValueChange: (String) -> Unit) {
     ) {
         Column {
             Text(title, fontSize = 18.sp)
-            Text(value, fontSize = 14.sp)
+            Text("$value$unit", fontSize = 14.sp)
         }
     }
 
@@ -62,13 +64,18 @@ fun TextControl(title: String, value: String, onValueChange: (String) -> Unit) {
                 var textState by remember { mutableStateOf(TextFieldValue(value.toString())) }
 
                 Column(modifier = Modifier.padding(12.dp)) {
-                    Text(text = title, style = MaterialTheme.typography.titleMedium)
+                    Text(text = "$title ($unit)", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     OutlinedTextField(
                         value = textState,
-                        onValueChange = { textState = it.copy() },
+                        onValueChange = { newTf ->
+                            val filtered = newTf.text.filterIndexed { i, ch ->
+                                (ch.isDigit()) || (ch == '-' && i == 0)
+                            }
+                            textState = newTf.copy(text = filtered)
+                        },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
+                            keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Done
                         ),
                         singleLine = true,
@@ -84,7 +91,8 @@ fun TextControl(title: String, value: String, onValueChange: (String) -> Unit) {
                         }
                         Spacer(Modifier.width(8.dp))
                         Button(onClick = {
-                            onValueChange(textState.text)
+                            val parsed = textState.text.toIntOrNull() ?: 0
+                            onValueChange(parsed)
                             showPopup = false
                         }) {
                             Text("ОК")

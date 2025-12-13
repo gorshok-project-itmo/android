@@ -104,6 +104,14 @@ class MockSmartPotApi(
         )
     }
 
+    override suspend fun putDevice(device: Device): Device {
+        delay(delayMs)
+
+        this.devices[device.id] = device.copy()
+
+        return this.devices[device.id]!!
+    }
+
     override suspend fun getWateringSchedules(deviceId: Int): List<WateringScheduleItem> {
         delay(delayMs)
         return schedules.filter { it.value.deviceId == deviceId }.toList().map {

@@ -31,7 +31,7 @@ fun DeviceListScreen(navController: NavController, vm: DeviceListViewModel = hil
                 Button(
                     onClick = {
                         navController.navigate(Screen.Device.createRoute(entry.id)) {
-                            popUpTo("device_list") { inclusive = true }
+                            popUpTo(Screen.DeviceList.route) { inclusive = true }
                         }
                     }
                 ) {

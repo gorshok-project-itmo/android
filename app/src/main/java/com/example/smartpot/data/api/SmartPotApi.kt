@@ -87,6 +87,8 @@ interface SmartPotApi {
     suspend fun getDeviceWateringStatus(deviceId: Int): WateringStatus
     suspend fun postDeviceTriggerWatering(deviceId: Int): DeviceTriggerWateringResponse
 
+    suspend fun putDevice(device: Device): Device
+
     suspend fun getWateringSchedules(deviceId: Int): List<WateringScheduleItem>
     suspend fun postWateringSchedule(request: WateringScheduleRequest): WateringScheduleItem
     suspend fun getWateringSchedule(id: Int): WateringScheduleItem
