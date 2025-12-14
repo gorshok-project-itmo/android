@@ -32,26 +32,28 @@ import com.example.smartpot.util.days
 fun ScheduleControl(scheduleItem: WateringScheduleItem, onValueChange: (WateringScheduleItem) -> Unit) {
     var showPopup by remember { mutableStateOf(false) }
 
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 6.dp)
-        .clickable {
-            showPopup = true
-        },
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .clickable { showPopup = true },
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = days[scheduleItem.dayOfWeek]!!,
-            modifier = Modifier.weight(0.4f)
+            text = days[scheduleItem.dayOfWeek] ?: "Unknown Day",
+            modifier = Modifier.weight(0.4f),
+            style = MaterialTheme.typography.bodyMedium
         )
         Text(
             text = scheduleItem.startTime.customFormat(),
-            modifier = Modifier.weight(0.3f)
+            modifier = Modifier.weight(0.3f),
+            style = MaterialTheme.typography.bodyMedium
         )
         Text(
-            text =  scheduleItem.endTime.customFormat(),
-            modifier = Modifier.weight(0.3f)
+            text = scheduleItem.endTime.customFormat(),
+            modifier = Modifier.weight(0.3f),
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 
@@ -60,7 +62,7 @@ fun ScheduleControl(scheduleItem: WateringScheduleItem, onValueChange: (Watering
             onDismissRequest = { showPopup = false }
         ) {
             Surface(
-                tonalElevation = 4.dp,
+                shadowElevation = 4.dp,
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,19 +72,23 @@ fun ScheduleControl(scheduleItem: WateringScheduleItem, onValueChange: (Watering
                 var startTime by remember { mutableStateOf(scheduleItem.startTime) }
                 var endTime by remember { mutableStateOf(scheduleItem.endTime) }
 
-                Column(modifier = Modifier.padding(12.dp)) {
-                    DayOfWeekDropdown("День недели", scheduleItem.dayOfWeek) {
-                        dayOfWeek = it
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Настройка расписания")
+
+                    Spacer(Modifier.height(12.dp))
+
+                    DayOfWeekDropdown("День недели", scheduleItem.dayOfWeek) { selectedDay ->
+                        dayOfWeek = selectedDay
                     }
 
                     Spacer(Modifier.height(8.dp))
-                    TimeControl("Время начала", startTime) {
-                        startTime = it
+                    TimeControl("Время начала", startTime) { selectedTime ->
+                        startTime = selectedTime
                     }
 
                     Spacer(Modifier.height(8.dp))
-                    TimeControl("Время конца", endTime) {
-                        endTime = it
+                    TimeControl("Время конца", endTime) { selectedTime ->
+                        endTime = selectedTime
                     }
 
                     Spacer(Modifier.height(12.dp))

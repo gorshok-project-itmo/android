@@ -30,18 +30,4 @@ class LaunchViewModel @Inject constructor(private val tokenRepo: TokenRepository
             else _state.value = LaunchState.SignedOut
         }
     }
-
-    fun signOut() {
-        viewModelScope.launch {
-            tokenRepo.clearToken()
-            _state.value = LaunchState.SignedOut
-        }
-    }
-
-    fun onSignedIn(token: String) {
-        viewModelScope.launch {
-            tokenRepo.saveToken(token)
-            _state.value = LaunchState.SignedIn(token)
-        }
-    }
 }

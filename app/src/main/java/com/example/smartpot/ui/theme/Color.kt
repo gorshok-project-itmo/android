@@ -1,11 +1,23 @@
 package com.example.smartpot.ui.theme
 
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val text = Color(0xFFE3F2FD)
+val accent = Color(0xFF3ACC41)
+val background = Color(0xFF1C1C1C)
+val background2 = Color(0xFF252323)
+val background3 = Color(0xFF383D3D)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val lightColors = darkColorScheme(
+    primary = accent,
+    secondary = Color(0xFF2B8040),
+    background = background,
+    onPrimary = background,
+    onSecondary = text,
+    onBackground = text,
+    onSurface = text,
+    onError = text,
+    surface = background2,
+    tertiary = background3
+)

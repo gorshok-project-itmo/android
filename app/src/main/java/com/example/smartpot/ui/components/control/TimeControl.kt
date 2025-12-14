@@ -8,16 +8,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.smartpot.util.customFormat
 import java.time.LocalTime
 
@@ -26,7 +26,7 @@ fun TimeControl(
     title: String,
     value: LocalTime,
     is24Hour: Boolean = true,
-    onTimeSelected: (value: LocalTime) -> Unit
+    onTimeSelected: (LocalTime) -> Unit
 ) {
     val context = LocalContext.current
     val hour = remember { mutableIntStateOf(value.hour) }
@@ -36,7 +36,8 @@ fun TimeControl(
         TimePickerDialog(
             context,
             { _: TimePicker, h: Int, m: Int ->
-                hour.intValue = h; minute.intValue = m
+                hour.intValue = h
+                minute.intValue = m
                 onTimeSelected(LocalTime.of(h, m))
             },
             hour.intValue,
@@ -45,18 +46,18 @@ fun TimeControl(
         )
     }
 
-    LaunchedEffect(Unit) { /* no-op to keep remember stable */ }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp)
-            .clickable { dialog.show() },
-        horizontalArrangement = Arrangement.SpaceBetween
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.tertiary),
+        onClick = { dialog.show() }
     ) {
-        Column {
-            Text(title, fontSize = 18.sp)
-            Text(LocalTime.of(hour.intValue, minute.intValue).customFormat())
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(title, style = MaterialTheme.typography.titleMedium)
+            Text(LocalTime.of(hour.intValue, minute.intValue).customFormat(), style = MaterialTheme.typography.bodyLarge)
         }
     }
 }

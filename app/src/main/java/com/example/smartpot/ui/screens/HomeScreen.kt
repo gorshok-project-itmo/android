@@ -11,15 +11,6 @@ import com.example.smartpot.ui.models.LaunchViewModel
 @Composable
 fun HomeScreen(navController: NavController, vm: LaunchViewModel) {
     Column {
-        H2("Начало")
 
-        Button(onClick = {
-            vm.signOut()
-            navController.navigate("login") {
-                popUpTo("home") { inclusive = true }
-            }
-        }) {
-            Text("Выйти")
-        }
     }
 }

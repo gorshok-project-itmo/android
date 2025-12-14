@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Controls(content: @Composable () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         content()
