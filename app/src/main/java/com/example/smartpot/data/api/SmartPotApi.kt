@@ -1,7 +1,9 @@
 package com.example.smartpot.data.api
 
+import com.example.smartpot.util.DayOfWeekSerializer
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import retrofit2.Response
 import java.time.DayOfWeek
 import java.time.LocalTime
 
@@ -49,13 +51,13 @@ data class WateringStatus(
 )
 
 @Serializable
-data class Auth(
+data class UserAuth(
     val email: String,
     val password: String
 )
 
 @Serializable
-data class User(
+data class UserData(
     val id: Int,
     val email: String
 )
@@ -65,12 +67,12 @@ data class AuthStatus(
     val code: Int,
     val message: String,
     val token: String,
-    val data: User
+    val data: UserData
 )
 
 @Serializable
 data class AuthRequest(
-    val user: Auth
+    val user: UserAuth
 )
 
 @Serializable
@@ -87,7 +89,7 @@ data class LogoutResponse(
 @Serializable
 data class WateringScheduleRequestData(
     val deviceId: Int,
-    val dayOfWeek: DayOfWeek,
+    @Serializable(with = DayOfWeekSerializer::class) val dayOfWeek: DayOfWeek,
     @Contextual val startTime: LocalTime,
     @Contextual val endTime: LocalTime,
     val active: Boolean
@@ -102,7 +104,7 @@ data class WateringScheduleRequest(
 data class WateringScheduleItem(
     val id: Int,
     val deviceId: Int,
-    val dayOfWeek: DayOfWeek,
+    @Serializable(with = DayOfWeekSerializer::class) val dayOfWeek: DayOfWeek,
     @Contextual val startTime: LocalTime,
     @Contextual val endTime: LocalTime,
     val active: Boolean,
@@ -111,18 +113,18 @@ data class WateringScheduleItem(
 )
 
 interface SmartPotApi {
-    suspend fun postSignup(request: AuthRequest): AuthResponse
-    suspend fun postLogin(request: AuthRequest): AuthResponse
-    suspend fun deleteLogout(): LogoutResponse
-    suspend fun postDevices(request: DeviceRequest): Device
-    suspend fun getDevices(): List<Device>
-    suspend fun getDevice(deviceId: Int): Device?
-    suspend fun getDeviceWateringStatus(deviceId: Int): WateringStatus
-    suspend fun postDeviceTriggerWatering(deviceId: Int): DeviceTriggerWateringResponse
+    suspend fun postSignup(request: AuthRequest): Response<AuthResponse>
+    suspend fun postLogin(request: AuthRequest): Response<AuthResponse>
+    suspend fun deleteLogout(): Response<LogoutResponse>
+    suspend fun postDevices(request: DeviceRequest): Response<Device>
+    suspend fun getDevices(): Response<List<Device>>
+    suspend fun getDevice(deviceId: Int): Response<Device>
+    suspend fun getDeviceWateringStatus(deviceId: Int): Response<WateringStatus>
+    suspend fun postDeviceTriggerWatering(deviceId: Int): Response<DeviceTriggerWateringResponse>
 
-    suspend fun getWateringSchedules(deviceId: Int): List<WateringScheduleItem>
-    suspend fun postWateringSchedule(request: WateringScheduleRequest): WateringScheduleItem
-    suspend fun getWateringSchedule(scheduleId: Int): WateringScheduleItem
-    suspend fun putWateringSchedule(scheduleId: Int, request: WateringScheduleRequest): WateringScheduleItem
-    suspend fun deleteSchedule(scheduleId: Int)
+    suspend fun getWateringSchedules(deviceId: Int): Response<List<WateringScheduleItem>>
+    suspend fun postWateringSchedule(request: WateringScheduleRequest): Response<WateringScheduleItem>
+    suspend fun getWateringSchedule(scheduleId: Int): Response<WateringScheduleItem>
+    suspend fun putWateringSchedule(scheduleId: Int, request: WateringScheduleRequest): Response<WateringScheduleItem>
+    suspend fun deleteSchedule(scheduleId: Int): Response<Unit>
 }

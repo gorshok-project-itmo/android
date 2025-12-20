@@ -55,9 +55,15 @@ fun Schedule(vm: DeviceViewModel) {
 
             Column {
                 schedule.values.forEach { entry ->
-                    ScheduleControl(entry) {
-                        vm.putWateringSchedule(it)
-                    }
+                    ScheduleControl(
+                        scheduleItem = entry,
+                        onValueChange = {
+                            vm.putWateringSchedule(it)
+                        },
+                        onDelete = {
+                            vm.deleteSchedule(it.id)
+                        }
+                    )
                 }
             }
         }

@@ -14,7 +14,7 @@ fun H2(text: String) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(
             top = 32.dp,
-            bottom = 4.dp
+            bottom = 8.dp
         )
     ) {
         Text(

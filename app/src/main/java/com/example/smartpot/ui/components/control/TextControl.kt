@@ -1,6 +1,5 @@
 package com.example.smartpot.ui.components.control
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,46 +50,61 @@ fun TextControl(title: String, value: String, onValueChange: (String) -> Unit) {
     }
 
     if (showPopup) {
-        Dialog(onDismissRequest = { showPopup = false }) {
-            Surface(
-                shadowElevation = 4.dp,
-                shape = MaterialTheme.shapes.medium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-            ) {
-                var textState by remember { mutableStateOf(TextFieldValue(value)) }
+        TextDialog(
+            title = title,
+            value = value,
+            onShowChange = { showPopup = it },
+            onValueChange = { onValueChange(it) }
+        )
+    }
+}
 
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text = title, style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedTextField(
-                        value = textState,
-                        onValueChange = { newValue ->
-                            textState = newValue
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Done
-                        ),
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        TextButton(onClick = { showPopup = false }) {
-                            Text("Cancel")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Button(onClick = {
-                            onValueChange(textState.text)
-                            showPopup = false
-                        }) {
-                            Text("OK")
-                        }
+@Composable
+fun TextDialog(
+    title: String,
+    value: String,
+    onShowChange: (Boolean) -> Unit,
+    onValueChange: (String) -> Unit
+) {
+    Dialog(onDismissRequest = { onShowChange(false) }) {
+        Surface(
+            shadowElevation = 4.dp,
+            shape = MaterialTheme.shapes.medium,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            var textState by remember { mutableStateOf(TextFieldValue(value)) }
+
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = title, style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = textState,
+                    onValueChange = { newValue ->
+                        textState = newValue
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextButton(onClick = { onShowChange(false) }) {
+                        Text("Отмена")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(onClick = {
+                        onValueChange(textState.text)
+                        onShowChange(false)
+                    }) {
+                        Text("ОК")
                     }
                 }
             }

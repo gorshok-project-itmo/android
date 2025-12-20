@@ -1,6 +1,7 @@
 package com.example.smartpot.data.repository
 
 import com.example.smartpot.data.api.AuthRequest
+import com.example.smartpot.data.api.DeviceRequest
 import com.example.smartpot.data.api.SmartPotApi
 import com.example.smartpot.data.api.WateringScheduleItem
 import com.example.smartpot.data.api.WateringScheduleRequest
@@ -10,6 +11,7 @@ class SmartPotRepository(private val api: SmartPotApi) {
     suspend fun postLogin(request: AuthRequest) = api.postLogin(request)
     suspend fun deleteLogout() = api.deleteLogout()
     suspend fun getDevices() = api.getDevices()
+    suspend fun postDevices(request: DeviceRequest) = api.postDevices(request)
     suspend fun getDevice(deviceId: Int) = api.getDevice(deviceId)
     suspend fun getDeviceWateringStatus(deviceId: Int) = api.getDeviceWateringStatus(deviceId)
     suspend fun postDeviceTriggerWatering(deviceId: Int) = api.postDeviceTriggerWatering(deviceId)

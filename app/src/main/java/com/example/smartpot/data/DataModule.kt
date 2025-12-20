@@ -8,6 +8,7 @@ import com.example.smartpot.data.api.TokenInterceptor
 import com.example.smartpot.data.repository.SmartPotRepository
 import com.example.smartpot.data.repository.TokenProvider
 import com.example.smartpot.data.repository.TokenRepository
+import com.example.smartpot.util.DayOfWeekSerializer
 import com.example.smartpot.util.LocalTimeAsHourMinuteSerializer
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -23,6 +24,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import java.time.DayOfWeek
 import java.time.LocalTime
 import javax.inject.Singleton
 
@@ -67,6 +69,7 @@ object DataModule {
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         val module = SerializersModule {
             contextual(LocalTime::class, LocalTimeAsHourMinuteSerializer)
+            contextual(DayOfWeek::class, DayOfWeekSerializer)
         }
 
         val json = Json {

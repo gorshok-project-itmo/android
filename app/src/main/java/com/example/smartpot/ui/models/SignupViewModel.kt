@@ -3,7 +3,7 @@ package com.example.smartpot.ui.models
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpot.data.api.Auth
+import com.example.smartpot.data.api.UserAuth
 import com.example.smartpot.data.api.AuthRequest
 import com.example.smartpot.data.repository.SmartPotRepository
 import com.example.smartpot.data.repository.TokenRepository
@@ -58,9 +58,15 @@ class SignupViewModel @Inject constructor(private val repo: SmartPotRepository, 
             _loading.value = true
 
             try {
-                val req = AuthRequest(Auth(e, p))
+                val req = AuthRequest(UserAuth(e, p))
                 val resp = repo.postSignup(req)
-                val token = resp.status.token
+
+                if (!resp.isSuccessful) {
+                    throw Exception("Ошибка сети")
+                }
+
+                val token = resp.body()!!.status.token
+
                 tokenRepo.saveToken(token)
                 _signedInEvent.emit(Unit)
             } catch (e: Throwable) {

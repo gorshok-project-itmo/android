@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.smartpot.data.api.WateringScheduleItem
@@ -29,7 +31,11 @@ import com.example.smartpot.util.customFormat
 import com.example.smartpot.util.days
 
 @Composable
-fun ScheduleControl(scheduleItem: WateringScheduleItem, onValueChange: (WateringScheduleItem) -> Unit) {
+fun ScheduleControl(
+    scheduleItem: WateringScheduleItem,
+    onValueChange: (WateringScheduleItem) -> Unit,
+    onDelete: (WateringScheduleItem) -> Unit
+) {
     var showPopup by remember { mutableStateOf(false) }
 
     Row(
@@ -93,24 +99,43 @@ fun ScheduleControl(scheduleItem: WateringScheduleItem, onValueChange: (Watering
 
                     Spacer(Modifier.height(12.dp))
                     Row(
-                        horizontalArrangement = Arrangement.End,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        TextButton(onClick = { showPopup = false }) {
-                            Text("Отмена")
+                        TextButton(
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = MaterialTheme.colorScheme.error,
+                                containerColor = Color.Transparent
+                            ),
+                            onClick = {
+                                onDelete(scheduleItem)
+                                showPopup = false
+                            }
+                        ) {
+                            Text("Удалить")
                         }
-                        Spacer(Modifier.width(8.dp))
-                        Button(onClick = {
-                            onValueChange(
-                                scheduleItem.copy(
-                                    dayOfWeek = dayOfWeek,
-                                    startTime = startTime,
-                                    endTime = endTime
+
+                        Row(
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextButton(onClick = { showPopup = false }) {
+                                Text("Отмена")
+                            }
+                            Spacer(Modifier.width(8.dp))
+                            Button(onClick = {
+                                onValueChange(
+                                    scheduleItem.copy(
+                                        dayOfWeek = dayOfWeek,
+                                        startTime = startTime,
+                                        endTime = endTime
+                                    )
                                 )
-                            )
-                            showPopup = false
-                        }) {
-                            Text("ОК")
+                                showPopup = false
+                            }) {
+                                Text("ОК")
+                            }
                         }
                     }
                 }

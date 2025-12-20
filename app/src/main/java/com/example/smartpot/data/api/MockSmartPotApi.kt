@@ -1,6 +1,7 @@
 package com.example.smartpot.data.api
 
 import kotlinx.coroutines.delay
+import retrofit2.Response
 
 class MockSmartPotApi(
     private val delayMs: Long = 200L
@@ -20,7 +21,10 @@ class MockSmartPotApi(
     private val schedules = mutableMapOf<Int, WateringScheduleItem>()
     private var token: String? = null
 
-    override suspend fun postSignup(request: AuthRequest): AuthResponse {
+    fun <T> makeResponse(data: T): Response<T> =
+        Response.success(data)
+
+    override suspend fun postSignup(request: AuthRequest): Response<AuthResponse> {
         delay(delayMs)
         val token = "1234567890"
 
@@ -29,7 +33,7 @@ class MockSmartPotApi(
                 200,
                 "success",
                 token,
-                User(
+                UserData(
                     1,
                     "test@test.com"
                 )
@@ -38,10 +42,10 @@ class MockSmartPotApi(
 
         this.token = token
 
-        return resp
+        return makeResponse(resp)
     }
 
-    override suspend fun postLogin(request: AuthRequest): AuthResponse {
+    override suspend fun postLogin(request: AuthRequest): Response<AuthResponse> {
         delay(delayMs)
         val token = "1234567890"
 
@@ -50,7 +54,7 @@ class MockSmartPotApi(
                 200,
                 "success",
                 token,
-                User(
+                UserData(
                     1,
                     "test@test.com"
                 )
@@ -59,44 +63,54 @@ class MockSmartPotApi(
 
         this.token = token
 
-        return resp
+        return makeResponse(resp)
     }
 
-    override suspend fun deleteLogout(): LogoutResponse {
+    override suspend fun deleteLogout(): Response<LogoutResponse> {
         delay(delayMs)
-        return LogoutResponse(
+
+        val resp = LogoutResponse(
             200,
             "success"
         )
+
+        return makeResponse(resp)
     }
 
-    override suspend fun postDevices(request: DeviceRequest): Device {
+    override suspend fun postDevices(request: DeviceRequest): Response<Device> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getDevices(): List<Device> {
+    override suspend fun getDevices(): Response<List<Device>> {
         delay(delayMs)
-        return this.devices.values.toList()
+        val resp = this.devices.values.toList()
+
+        return makeResponse(resp)
     }
 
-    override suspend fun getDevice(deviceId: Int): Device? {
+    override suspend fun getDevice(deviceId: Int): Response<Device> {
         delay(delayMs)
-        return this.devices[deviceId]
+        val resp = this.devices[deviceId]
+
+        return makeResponse(resp!!)
     }
 
-    override suspend fun getDeviceWateringStatus(deviceId: Int): WateringStatus {
+    override suspend fun getDeviceWateringStatus(deviceId: Int): Response<WateringStatus> {
         delay(delayMs)
         val device = devices[deviceId]!!
-        return WateringStatus(
+
+        val resp = WateringStatus(
             device.name,
             device.mode,
             device.waterLevel,
             device.humidityThreshold,
             false
         )
+
+        return makeResponse(resp)
     }
 
-    override suspend fun postDeviceTriggerWatering(deviceId: Int): DeviceTriggerWateringResponse {
+    override suspend fun postDeviceTriggerWatering(deviceId: Int): Response<DeviceTriggerWateringResponse> {
         TODO()
 //        delay(delayMs)
 //        return DeviceTriggerWateringResponse(
@@ -106,14 +120,17 @@ class MockSmartPotApi(
 //        )
     }
 
-    override suspend fun getWateringSchedules(deviceId: Int): List<WateringScheduleItem> {
+    override suspend fun getWateringSchedules(deviceId: Int): Response<List<WateringScheduleItem>> {
         delay(delayMs)
-        return schedules.filter { it.value.deviceId == deviceId }.toList().map {
+
+        val resp = schedules.filter { it.value.deviceId == deviceId }.toList().map {
             it.second
         }
+
+        return makeResponse(resp)
     }
 
-    override suspend fun postWateringSchedule(request: WateringScheduleRequest): WateringScheduleItem {
+    override suspend fun postWateringSchedule(request: WateringScheduleRequest): Response<WateringScheduleItem> {
         TODO()
 
 //        delay(delayMs)
@@ -135,17 +152,19 @@ class MockSmartPotApi(
 //        return item
     }
 
-    override suspend fun getWateringSchedule(scheduleId: Int): WateringScheduleItem {
+    override suspend fun getWateringSchedule(scheduleId: Int): Response<WateringScheduleItem> {
         val item = schedules[scheduleId]!!
-        return item
+        return makeResponse(item)
     }
 
-    override suspend fun putWateringSchedule(scheduleId: Int, request: WateringScheduleRequest): WateringScheduleItem {
+    override suspend fun putWateringSchedule(scheduleId: Int, request: WateringScheduleRequest): Response<WateringScheduleItem> {
         TODO()
     }
 
-    override suspend fun deleteSchedule(scheduleId: Int) {
+    override suspend fun deleteSchedule(scheduleId: Int): Response<Unit> {
         delay(delayMs)
         schedules.remove(scheduleId)
+
+        return makeResponse(Unit)
     }
 }

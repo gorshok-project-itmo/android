@@ -8,6 +8,7 @@ val accent = Color(0xFF3ACC41)
 val background = Color(0xFF1C1C1C)
 val background2 = Color(0xFF252323)
 val background3 = Color(0xFF383D3D)
+val danger = Color(0xFFE1452A)
 
 val lightColors = darkColorScheme(
     primary = accent,
@@ -19,5 +20,6 @@ val lightColors = darkColorScheme(
     onSurface = text,
     onError = text,
     surface = background2,
-    tertiary = background3
+    tertiary = background3,
+    error = danger
 )

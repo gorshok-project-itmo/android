@@ -40,7 +40,7 @@ val days = mapOf(
 
 
 object LocalTimeAsHourMinuteSerializer : KSerializer<LocalTime> {
-    private val fmt: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm")
+    private val fmt: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("LocalTimeAsHourMinute", PrimitiveKind.STRING)
@@ -52,11 +52,23 @@ object LocalTimeAsHourMinuteSerializer : KSerializer<LocalTime> {
 
     override fun deserialize(decoder: Decoder): LocalTime {
         val text = decoder.decodeString()
-        return try {
-            LocalTime.parse(text, fmt)
-        } catch (e: DateTimeParseException) {
-            val normalized = text.padStart(5, '0')
-            LocalTime.parse(normalized, fmt)
-        }
+        val t = LocalTime.parse(text, fmt)
+
+        return t
+    }
+}
+
+object DayOfWeekSerializer : KSerializer<DayOfWeek> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("DayOfWeek", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: DayOfWeek) {
+        val text = value.name.lowercase()
+        encoder.encodeString(text)
+    }
+
+    override fun deserialize(decoder: Decoder): DayOfWeek {
+        val text = decoder.decodeString()
+        return DayOfWeek.valueOf(text.uppercase())
     }
 }

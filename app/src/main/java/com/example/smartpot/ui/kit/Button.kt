@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -16,6 +17,8 @@ fun SmartPotButton(
     modifier: Modifier = Modifier,
     buttonText: String,
     buttonHeight: Int = 56,
+    textColor: Color = MaterialTheme.colorScheme.onPrimary,
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
     enabled: Boolean = true,
     onClickAction: () -> Unit
 ) {
@@ -24,7 +27,10 @@ fun SmartPotButton(
         modifier = modifier
             .fillMaxWidth()
             .height(buttonHeight.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = textColor,
+            containerColor = backgroundColor
+        ),
         shape = MaterialTheme.shapes.small,
         enabled = enabled
     ) {

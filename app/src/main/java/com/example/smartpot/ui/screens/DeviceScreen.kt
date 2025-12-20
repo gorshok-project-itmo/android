@@ -40,7 +40,6 @@ import com.example.smartpot.ui.models.DeviceViewModel
 fun DeviceScreen(navController: NavController, deviceId: Int, vm: DeviceViewModel = hiltViewModel()) {
     val scrollState = rememberScrollState()
     val deviceState = vm.device.collectAsState()
-    val device = deviceState.value.device
 
     LaunchedEffect(vm) {
         vm.getDevice(deviceId)
@@ -61,39 +60,42 @@ fun DeviceScreen(navController: NavController, deviceId: Int, vm: DeviceViewMode
             navController = navController
         )
 
-        if (device == null) {
+        if (deviceState.value == null) {
             H2("Устройство не найдено")
             return
         }
 
-        H2(deviceState.value.device?.name ?: "")
+        val device = deviceState.value!!.device
+
+        H2(device.name)
 
         Tiles(
             listOf(
-                Tile("вода для полива", "${(device.waterLevel * 100).toInt()}%")
+                Tile("вода для полива", "${(device.waterLevel).toInt()}%"),
+                Tile("порог влажности для начала полива", "${((device.humidityThreshold * 100).toInt())}%")
             )
         )
 
-        H2("Настройки")
-
-        Controls {
-            IntControl(
-                title = "Порог влажности для начала полива",
-                unit = "%",
-                value = ((device.humidityThreshold * 100).toInt()),
-                onValueChange = {
+//        H2("Настройки")
+//
+//        Controls {
+//            IntControl(
+//                title = "Порог влажности для начала полива",
+//                unit = "%",
+//                value = ((device.humidityThreshold * 100).toInt()),
+//                onValueChange = {
 //                    vm.setHumidityThreshold(it)
-                }
-            )
-
-            TextControl(
-                title = "Название устройства",
-                value = device.name,
-                onValueChange = {
+//                }
+//            )
+//
+//            TextControl(
+//                title = "Название устройства",
+//                value = device.name,
+//                onValueChange = {
 //                    vm.setDeviceName(it)
-                }
-            )
-        }
+//                }
+//            )
+//        }
 
         H2("Расписание")
 
