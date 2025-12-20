@@ -74,6 +74,8 @@ fun SignupScreen(navController: NavController, vm: SignupViewModel = hiltViewMod
                 modifier = Modifier.fillMaxWidth()
             )
 
+            Spacer(modifier = Modifier.height(4.dp))
+
             SmartPotButton(
                 buttonText = if (loading) "Регистрация..." else "Зарегистрироваться",
                 enabled = !loading,

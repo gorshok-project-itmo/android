@@ -64,7 +64,7 @@ fun LoginScreen(navController: NavController, vm: LoginViewModel = hiltViewModel
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             SmartPotButton(
                 buttonText = if (loading) "Вход..." else "Войти",
