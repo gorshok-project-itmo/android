@@ -1,9 +1,6 @@
 package com.example.smartpot.data.api
 
 import kotlinx.coroutines.delay
-import java.sql.Timestamp
-import java.time.Instant
-import kotlin.random.Random
 
 class MockSmartPotApi(
     private val delayMs: Long = 200L
@@ -73,6 +70,10 @@ class MockSmartPotApi(
         )
     }
 
+    override suspend fun postDevices(request: DeviceRequest): Device {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getDevices(): List<Device> {
         delay(delayMs)
         return this.devices.values.toList()
@@ -96,20 +97,13 @@ class MockSmartPotApi(
     }
 
     override suspend fun postDeviceTriggerWatering(deviceId: Int): DeviceTriggerWateringResponse {
-        delay(delayMs)
-        return DeviceTriggerWateringResponse(
-            "Mock start",
-            10,
-            Timestamp.from(Instant.now()) as Timestamp
-        )
-    }
-
-    override suspend fun putDevice(device: Device): Device {
-        delay(delayMs)
-
-        this.devices[device.id] = device.copy()
-
-        return this.devices[device.id]!!
+        TODO()
+//        delay(delayMs)
+//        return DeviceTriggerWateringResponse(
+//            "Mock start",
+//            10,
+//            Timestamp.from(Instant.now()) as Timestamp
+//        )
     }
 
     override suspend fun getWateringSchedules(deviceId: Int): List<WateringScheduleItem> {
@@ -120,36 +114,38 @@ class MockSmartPotApi(
     }
 
     override suspend fun postWateringSchedule(request: WateringScheduleRequest): WateringScheduleItem {
-        delay(delayMs)
+        TODO()
 
-        val id = Random.Default.nextInt()
+//        delay(delayMs)
+//
+//        val id = Random.Default.nextInt()
+//
+//        val item = WateringScheduleItem(
+//            id = id,
+//            deviceId = request.wateringSchedule.deviceId,
+//            dayOfWeek = request.wateringSchedule.dayOfWeek,
+//            startTime = request.wateringSchedule.startTime,
+//            endTime = request.wateringSchedule.endTime,
+//            active = request.wateringSchedule.active,
+//            createdAt = TODO(),
+//            updatedAt = TODO()
+//        )
+//
+//        schedules[id] = item
+//        return item
+    }
 
-        val item = WateringScheduleItem(
-            id = id,
-            deviceId = request.deviceId,
-            dayOfWeek = request.dayOfWeek,
-            startTime = request.startTime,
-            endTime = request.endTime,
-            active = request.active
-        )
-
-        schedules[id] = item
+    override suspend fun getWateringSchedule(scheduleId: Int): WateringScheduleItem {
+        val item = schedules[scheduleId]!!
         return item
     }
 
-    override suspend fun getWateringSchedule(id: Int): WateringScheduleItem {
-        val item = schedules[id]!!
-        return item
+    override suspend fun putWateringSchedule(scheduleId: Int, request: WateringScheduleRequest): WateringScheduleItem {
+        TODO()
     }
 
-    override suspend fun putWateringSchedule(item: WateringScheduleItem): WateringScheduleItem {
+    override suspend fun deleteSchedule(scheduleId: Int) {
         delay(delayMs)
-        schedules[item.id] = item
-        return item
-    }
-
-    override suspend fun deleteSchedule(id: Int) {
-        delay(delayMs)
-        schedules.remove(id)
+        schedules.remove(scheduleId)
     }
 }

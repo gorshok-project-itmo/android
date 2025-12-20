@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartpot.data.api.Device
 import com.example.smartpot.data.api.WateringScheduleItem
 import com.example.smartpot.data.api.WateringScheduleRequest
+import com.example.smartpot.data.api.WateringScheduleRequestData
 import com.example.smartpot.data.repository.SmartPotRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,19 +38,19 @@ class DeviceViewModel @Inject constructor(private val repo: SmartPotRepository) 
         _device.value = DeviceState(resp)
     }
 
-    fun putDevice(device: Device) = viewModelScope.launch {
-        val resp = repo.putDevice(device)
-
-        _device.value = DeviceState(resp)
-    }
-
-    fun setHumidityThreshold(value: Int) {
-        putDevice(_device.value.device!!.copy(humidityThreshold = (value.toDouble()) / 100))
-    }
-
-    fun setDeviceName(value: String) {
-        putDevice(_device.value.device!!.copy(name = value))
-    }
+//    fun putDevice(device: Device) = viewModelScope.launch {
+//        val resp = repo.putDevice(device)
+//
+//        _device.value = DeviceState(resp)
+//    }
+//
+//    fun setHumidityThreshold(value: Int) {
+//        putDevice(_device.value.device!!.copy(humidityThreshold = (value.toDouble()) / 100))
+//    }
+//
+//    fun setDeviceName(value: String) {
+//        putDevice(_device.value.device!!.copy(name = value))
+//    }
 
     fun getDeviceWateringStatus() = viewModelScope.launch {
         val resp = repo.getDeviceWateringStatus(device.value.device!!.id)
@@ -71,11 +72,13 @@ class DeviceViewModel @Inject constructor(private val repo: SmartPotRepository) 
         val device = _device.value.device ?: return@launch
 
         val resp = repo.postWateringSchedule(WateringScheduleRequest(
-            deviceId = device.id,
-            startTime = startTime,
-            endTime = endTime,
-            dayOfWeek = dayOfWeek,
-            active = true
+            wateringSchedule = WateringScheduleRequestData(
+                deviceId = device.id,
+                startTime = startTime,
+                endTime = endTime,
+                dayOfWeek = dayOfWeek,
+                active = true
+            )
         ))
 
         _schedule.update { current ->
@@ -93,7 +96,17 @@ class DeviceViewModel @Inject constructor(private val repo: SmartPotRepository) 
     }
 
     fun putWateringSchedule(item: WateringScheduleItem) = viewModelScope.launch {
-        val resp = repo.putWateringSchedule(item)
+        val device = _device.value.device ?: return@launch
+
+        val resp = repo.putWateringSchedule(item.id, WateringScheduleRequest(
+            wateringSchedule = WateringScheduleRequestData(
+                deviceId = device.id,
+                startTime = item.startTime,
+                endTime = item.endTime,
+                dayOfWeek = item.dayOfWeek,
+                active = true
+            )
+        ))
 
         _schedule.update { current ->
             current.copy(current.schedule.toMutableMap().also { it.put(resp.id, resp) })

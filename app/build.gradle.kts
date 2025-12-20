@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
     kotlin("kapt")
 }
 
@@ -42,6 +43,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -64,12 +67,14 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
-    implementation(libs.moshi)
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-//    implementation(libs.logging.interceptor)
+
+
+    implementation(libs.logging.interceptor.v4110)
+
+
 }

@@ -81,13 +81,17 @@ fun DeviceScreen(navController: NavController, deviceId: Int, vm: DeviceViewMode
                 title = "Порог влажности для начала полива",
                 unit = "%",
                 value = ((device.humidityThreshold * 100).toInt()),
-                onValueChange = { vm.setHumidityThreshold(it) }
+                onValueChange = {
+//                    vm.setHumidityThreshold(it)
+                }
             )
 
             TextControl(
                 title = "Название устройства",
                 value = device.name,
-                onValueChange = { vm.setDeviceName(it) }
+                onValueChange = {
+//                    vm.setDeviceName(it)
+                }
             )
         }
 
