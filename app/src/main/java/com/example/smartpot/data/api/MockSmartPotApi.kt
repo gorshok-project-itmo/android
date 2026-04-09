@@ -2,22 +2,12 @@ package com.example.smartpot.data.api
 
 import kotlinx.coroutines.delay
 import retrofit2.Response
+import kotlin.random.Random
 
 class MockSmartPotApi(
     private val delayMs: Long = 200L
 ) : SmartPotApi {
-    private val devices = mutableMapOf<Int, Device>(1 to Device(
-        id = 1,
-        name = "MyDevice1",
-        mode = "schedule",
-        intervalHours = 5,
-        durationMinutes = 30,
-        humidityThreshold = 0.3,
-        waterLevel = 1.0,
-        userId = 99,
-        createdAt = "",
-        updatedAt = ""
-    ))
+    private val devices = mutableMapOf<Int, Device>()
     private val schedules = mutableMapOf<Int, WateringScheduleItem>()
     private var token: String? = null
 
@@ -78,7 +68,26 @@ class MockSmartPotApi(
     }
 
     override suspend fun postDevices(request: DeviceRequest): Response<Device> {
-        TODO("Not yet implemented")
+        delay(delayMs)
+
+        val id = Random.nextInt()
+
+        val device = Device(
+            id = id,
+            name = request.name,
+            mode = request.mode,
+            intervalHours = request.intervalHours,
+            durationMinutes = request.durationMinutes,
+            humidityThreshold = request.humidityThreshold,
+            waterLevel = request.waterLevel,
+            userId = 99,
+            createdAt = "",
+            updatedAt = ""
+        )
+
+        devices[id] = device
+
+        return Response.success(device)
     }
 
     override suspend fun getDevices(): Response<List<Device>> {
@@ -131,25 +140,23 @@ class MockSmartPotApi(
     }
 
     override suspend fun postWateringSchedule(request: WateringScheduleRequest): Response<WateringScheduleItem> {
-        TODO()
+        delay(delayMs)
 
-//        delay(delayMs)
-//
-//        val id = Random.Default.nextInt()
-//
-//        val item = WateringScheduleItem(
-//            id = id,
-//            deviceId = request.wateringSchedule.deviceId,
-//            dayOfWeek = request.wateringSchedule.dayOfWeek,
-//            startTime = request.wateringSchedule.startTime,
-//            endTime = request.wateringSchedule.endTime,
-//            active = request.wateringSchedule.active,
-//            createdAt = TODO(),
-//            updatedAt = TODO()
-//        )
-//
-//        schedules[id] = item
-//        return item
+        val id = Random.nextInt()
+
+        val item = WateringScheduleItem(
+            id = id,
+            deviceId = request.wateringSchedule.deviceId,
+            dayOfWeek = request.wateringSchedule.dayOfWeek,
+            startTime = request.wateringSchedule.startTime,
+            endTime = request.wateringSchedule.endTime,
+            active = request.wateringSchedule.active,
+            createdAt = "2026-01-01 00:00:00",
+            updatedAt = "2026-01-01 00:00:00"
+        )
+
+        schedules[id] = item
+        return Response.success(item)
     }
 
     override suspend fun getWateringSchedule(scheduleId: Int): Response<WateringScheduleItem> {
@@ -158,7 +165,21 @@ class MockSmartPotApi(
     }
 
     override suspend fun putWateringSchedule(scheduleId: Int, request: WateringScheduleRequest): Response<WateringScheduleItem> {
-        TODO()
+        delay(delayMs)
+
+        val item = WateringScheduleItem(
+            id = scheduleId,
+            deviceId = request.wateringSchedule.deviceId,
+            dayOfWeek = request.wateringSchedule.dayOfWeek,
+            startTime = request.wateringSchedule.startTime,
+            endTime = request.wateringSchedule.endTime,
+            active = request.wateringSchedule.active,
+            createdAt = "2026-01-01 00:00:00",
+            updatedAt = "2026-01-01 00:00:00"
+        )
+
+        schedules[scheduleId] = item
+        return Response.success(item)
     }
 
     override suspend fun deleteSchedule(scheduleId: Int): Response<Unit> {

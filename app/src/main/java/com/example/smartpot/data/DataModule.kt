@@ -1,6 +1,7 @@
 package com.example.smartpot.data
 
 import android.content.Context
+import com.example.smartpot.data.api.MockSmartPotApi
 import com.example.smartpot.data.api.RealSmartPotApi
 import com.example.smartpot.data.api.SmartPotApi
 import com.example.smartpot.data.api.SmartPotRetrofitService
@@ -97,7 +98,8 @@ object DataModule {
     @Provides
     @Singleton
     fun provideApi(service: SmartPotRetrofitService): SmartPotApi {
-        return RealSmartPotApi(service)
+        //return RealSmartPotApi(service)
+        return MockSmartPotApi(500)
     }
 
     @Provides
