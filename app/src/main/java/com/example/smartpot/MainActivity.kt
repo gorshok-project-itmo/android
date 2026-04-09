@@ -30,6 +30,7 @@ import com.example.smartpot.ui.screens.DeviceListScreen
 import com.example.smartpot.ui.screens.DeviceScreen
 import com.example.smartpot.ui.screens.HomeScreen
 import com.example.smartpot.ui.screens.LoginScreen
+import com.example.smartpot.ui.screens.SensorScreen
 import com.example.smartpot.ui.screens.SignupScreen
 import com.example.smartpot.ui.screens.SplashScreen
 import com.example.smartpot.ui.theme.SmartPotTheme
@@ -116,6 +117,10 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.Splash.route) {
                             SplashScreen(navController)
+                        }
+
+                        composable(Screen.Sensor.route) {
+                            SensorScreen(navController)
                         }
                     }
                 }

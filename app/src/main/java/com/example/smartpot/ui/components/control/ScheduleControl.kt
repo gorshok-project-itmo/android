@@ -83,8 +83,13 @@ fun ScheduleControl(
 
                     Spacer(Modifier.height(12.dp))
 
-                    DayOfWeekDropdown("День недели", scheduleItem.dayOfWeek) { selectedDay ->
-                        dayOfWeek = selectedDay
+                    DropdownControl(
+                        "День недели",
+                        "Выберите день недели",
+                        days,
+                        scheduleItem.dayOfWeek
+                    ) {
+                        dayOfWeek = it
                     }
 
                     Spacer(Modifier.height(8.dp))

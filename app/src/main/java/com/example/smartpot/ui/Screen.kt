@@ -9,6 +9,7 @@ sealed class Screen(val route: String, val title: String) {
     object Signup : Screen("signup", "Регистрация")
     object Login : Screen("login", "Вход")
     object Splash : Screen("splash", "Загрузка")
+    object Sensor : Screen("sensor", "Сенсоры")
 }
 
 fun getScreen(route: String?): Screen {
@@ -23,6 +24,7 @@ fun getScreen(route: String?): Screen {
         route == "signup" -> Screen.Signup
         route == "login" -> Screen.Login
         route == "splash" -> Screen.Splash
+        route == "sensor" -> Screen.Sensor
 
         else -> Screen.Home
     }

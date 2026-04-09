@@ -92,6 +92,15 @@ fun DeviceListScreen(navController: NavController, vm: DeviceListViewModel = hil
             }
         }
 
+        SmartPotButton(
+            buttonText = "Сенсоры",
+            onClickAction = {
+                navController.navigate("sensor") {
+                    popUpTo("device_list") { inclusive = true }
+                }
+            }
+        )
+
         H2("Шаблоны")
 
         Tiles(listOf(

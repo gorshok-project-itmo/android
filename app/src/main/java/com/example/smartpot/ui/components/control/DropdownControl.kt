@@ -1,9 +1,7 @@
 package com.example.smartpot.ui.components.control
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -20,24 +18,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.example.smartpot.util.days
 import java.time.DayOfWeek
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DayOfWeekDropdown(
+fun <K> DropdownControl(
     title: String,
-    selectedDay: DayOfWeek? = null,
-    onDaySelected: (DayOfWeek) -> Unit = {}
+    placeholder: String,
+    items: Map<K, String>,
+    selectedItem: K? = null,
+    onItemSelected: (K) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selected by remember { mutableStateOf(selectedDay) }
+    var selected by remember { mutableStateOf(selectedItem) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = it }
+        onExpandedChange = { expanded = it },
     ) {
         Card(
             modifier = Modifier
@@ -55,7 +54,7 @@ fun DayOfWeekDropdown(
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = selected?.let { days[it] } ?: "Select a day",
+                    text = selected?.let { items[it] } ?: placeholder,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -64,17 +63,17 @@ fun DayOfWeekDropdown(
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.tertiary, MaterialTheme.shapes.medium),
-            shadowElevation = 2.dp
+            shadowElevation = 2.dp,
+            onDismissRequest = { expanded = false },
         ) {
-            days.forEach { day ->
+            items.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(day.value) },
+                    text = { Text(item.value) },
                     onClick = {
-                        selected = day.key
-                        onDaySelected(day.key)
+                        selected = item.key
+                        onItemSelected(item.key)
                         expanded = false
                     }
                 )
