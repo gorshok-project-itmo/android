@@ -92,8 +92,12 @@ fun DeviceListScreen(navController: NavController, vm: DeviceListViewModel = hil
             }
         }
 
+        H2("Сенсоры")
+
+        Text("Сенсор света и компас помогут выбрать оптимальное положение для растения в помещении")
+
         SmartPotButton(
-            buttonText = "Сенсоры",
+            buttonText = "Открыть сенсоры",
             onClickAction = {
                 navController.navigate("sensor") {
                     popUpTo("device_list") { inclusive = true }
