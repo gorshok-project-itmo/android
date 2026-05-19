@@ -26,7 +26,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.smartpot.ui.components.Form
 import com.example.smartpot.ui.components.H2
+import com.example.smartpot.ui.components.form.TextInput
 import com.example.smartpot.ui.kit.SmartPotButton
+import com.example.smartpot.ui.kit.SmartPotButtonSecondary
 import com.example.smartpot.ui.models.SignupViewModel
 
 @Composable
@@ -50,31 +52,34 @@ fun SignupScreen(navController: NavController, vm: SignupViewModel = hiltViewMod
 
         H2("Регистрация")
 
+        Spacer(Modifier.height(16.dp))
+
         Form {
-            OutlinedTextField(
+            TextInput(
                 value = email,
                 onValueChange = vm::onEmailChange,
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = vm::onPasswordChange,
-                label = { Text("Пароль") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            OutlinedTextField(
-                value = confirmPassword,
-                onValueChange = vm::onConfirmPasswordChange,
-                label = { Text("Подтверждение пароля") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                placeholder = "Email"
             )
 
             Spacer(modifier = Modifier.height(4.dp))
+
+            TextInput(
+                value = password,
+                onValueChange = vm::onPasswordChange,
+                placeholder = "Пароль",
+                visualTransformation = PasswordVisualTransformation()
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            TextInput(
+                value = confirmPassword,
+                onValueChange = vm::onConfirmPasswordChange,
+                placeholder = "Подтверждение пароля",
+                visualTransformation = PasswordVisualTransformation()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             SmartPotButton(
                 buttonText = if (loading) "Регистрация..." else "Зарегистрироваться",
@@ -95,12 +100,8 @@ fun SignupScreen(navController: NavController, vm: SignupViewModel = hiltViewMod
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(top = 16.dp)
             ) {
-                Text("Уже есть аккаунт?")
-
-                Spacer(Modifier.width(8.dp))
-
-                SmartPotButton(
-                    buttonText = "Войти",
+                SmartPotButtonSecondary(
+                    buttonText = "Уже есть аккаунт? Войти",
                     onClickAction = {
                         navController.navigate("login") {
                             popUpTo("signup") { inclusive = true }

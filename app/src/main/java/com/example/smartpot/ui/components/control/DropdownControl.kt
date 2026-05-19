@@ -11,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.smartpot.ui.kit.card
 import com.example.smartpot.util.days
 import java.time.DayOfWeek
 
@@ -38,20 +40,18 @@ fun <K> DropdownControl(
         expanded = expanded,
         onExpandedChange = { expanded = it },
     ) {
-        Card(
+        Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-            shape = MaterialTheme.shapes.medium,
-            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.tertiary)
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                .card(),
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleSmall
                 )
                 Text(
                     text = selected?.let { items[it] } ?: placeholder,

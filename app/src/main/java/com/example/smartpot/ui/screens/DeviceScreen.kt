@@ -61,7 +61,6 @@ fun DeviceScreen(navController: NavController, deviceId: Int, vm: DeviceViewMode
         )
 
         if (deviceState.value == null) {
-            H2("Устройство не найдено")
             return
         }
 
@@ -71,8 +70,16 @@ fun DeviceScreen(navController: NavController, deviceId: Int, vm: DeviceViewMode
 
         Tiles(
             listOf(
-                Tile("вода для полива", "${(device.waterLevel).toInt()}%"),
-                Tile("порог влажности для начала полива", "${((device.humidityThreshold * 100).toInt())}%")
+                Tile(
+                    "Уровень воды",
+                    "Заполненность резервуара",
+                    "${(device.waterLevel).toInt()}%"
+                ),
+                Tile(
+                    "Порог влажности",
+                    "Полив начнётся ниже этого значения",
+                    "${((device.humidityThreshold * 100).toInt())}%"
+                )
             )
         )
 
@@ -97,7 +104,9 @@ fun DeviceScreen(navController: NavController, deviceId: Int, vm: DeviceViewMode
 //            )
 //        }
 
-        H2("Расписание")
+        H2("Расписание полива")
+
+        Spacer(Modifier.height(8.dp))
 
         Schedule(vm)
 

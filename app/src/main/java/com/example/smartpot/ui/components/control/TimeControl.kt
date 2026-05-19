@@ -1,9 +1,11 @@
 package com.example.smartpot.ui.components.control
 
 import android.app.TimePickerDialog
+import android.view.Surface
 import android.widget.TimePicker
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
@@ -18,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.smartpot.ui.kit.card
 import com.example.smartpot.util.customFormat
 import java.time.LocalTime
 
@@ -46,17 +50,14 @@ fun TimeControl(
         )
     }
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.tertiary),
+    Surface(
+        modifier = Modifier.fillMaxWidth().card(),
         onClick = { dialog.show() }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(title, style = MaterialTheme.typography.titleMedium)
+            Text(title, style = MaterialTheme.typography.titleSmall)
             Text(LocalTime.of(hour.intValue, minute.intValue).customFormat(), style = MaterialTheme.typography.bodyLarge)
         }
     }

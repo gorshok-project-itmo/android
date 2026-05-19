@@ -1,10 +1,12 @@
 package com.example.smartpot.ui.kit
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,7 +33,7 @@ fun SmartPotButton(
             contentColor = textColor,
             containerColor = backgroundColor
         ),
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.large,
         enabled = enabled
     ) {
         Text(
@@ -39,6 +41,42 @@ fun SmartPotButton(
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+}
+
+@Composable
+fun SmartPotButtonSecondary(
+    modifier: Modifier = Modifier,
+    buttonText: String,
+    buttonHeight: Int = 56,
+    textColor: Color = MaterialTheme.colorScheme.onSurface,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    borderColor: Color = MaterialTheme.colorScheme.tertiary,
+    enabled: Boolean = true,
+    onClickAction: () -> Unit
+) {
+    Button(
+        onClick = onClickAction,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(buttonHeight.dp),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = textColor,
+            containerColor = backgroundColor,
+        ),
+        border = BorderStroke(
+            1.dp,
+            borderColor
+        ),
+        shape = MaterialTheme.shapes.large,
+        enabled = enabled
+    ) {
+        Text(
+            buttonText,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = textColor
         )
     }
 }

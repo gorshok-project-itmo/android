@@ -1,7 +1,10 @@
 package com.example.smartpot.ui.components.control
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +30,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.smartpot.data.api.WateringScheduleItem
+import com.example.smartpot.ui.kit.Chip
+import com.example.smartpot.ui.kit.card
 import com.example.smartpot.util.customFormat
 import com.example.smartpot.util.days
 
@@ -41,24 +46,22 @@ fun ScheduleControl(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .clickable { showPopup = true },
+            .height(72.dp)
+            .clickable { showPopup = true }
+            .card(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .weight(0.4f),
+        ) {
+            Chip(text = days[scheduleItem.dayOfWeek] ?: "Unknown Day")
+        }
         Text(
-            text = days[scheduleItem.dayOfWeek] ?: "Unknown Day",
-            modifier = Modifier.weight(0.4f),
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Text(
-            text = scheduleItem.startTime.customFormat(),
-            modifier = Modifier.weight(0.3f),
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Text(
-            text = scheduleItem.endTime.customFormat(),
-            modifier = Modifier.weight(0.3f),
+            text = "${scheduleItem.startTime.customFormat()} – ${scheduleItem.endTime.customFormat()}",
+            modifier = Modifier.weight(0.6f),
             style = MaterialTheme.typography.bodyMedium
         )
     }
@@ -78,7 +81,7 @@ fun ScheduleControl(
                 var startTime by remember { mutableStateOf(scheduleItem.startTime) }
                 var endTime by remember { mutableStateOf(scheduleItem.endTime) }
 
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(32.dp)) {
                     Text("Настройка расписания")
 
                     Spacer(Modifier.height(12.dp))

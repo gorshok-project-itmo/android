@@ -1,5 +1,6 @@
 package com.example.smartpot.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,6 +41,7 @@ import com.example.smartpot.ui.components.Tile
 import com.example.smartpot.ui.components.Tiles
 import com.example.smartpot.ui.components.control.TextDialog
 import com.example.smartpot.ui.kit.SmartPotButton
+import com.example.smartpot.ui.kit.SmartPotButtonSecondary
 import com.example.smartpot.ui.models.DeviceListViewModel
 
 @Composable
@@ -64,20 +66,33 @@ fun DeviceListScreen(navController: NavController, vm: DeviceListViewModel = hil
     ) {
         Spacer(Modifier.height(16.dp))
 
-        H2("Список устройств")
+        H2("Устройства")
+
+        Spacer(Modifier.height(4.dp))
 
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            devices.values.toList().forEach { entry ->
-                DeviceListItem(entry, navController)
+            if (devices.isEmpty()) {
+                Text("Нет подключённых устройств")
+            } else {
+                Text("${devices.size} устройств подключено")
+                Spacer(Modifier.height(4.dp))
+                devices.values.toList().forEach { entry ->
+                    DeviceListItem(entry, navController)
+                }
             }
 
             var showDialog by remember { mutableStateOf(false) }
 
-            SmartPotButton(
+            Spacer(Modifier.height(8.dp))
+
+            SmartPotButtonSecondary(
                 buttonText = "Добавить",
                 onClickAction = {
                     showDialog = true
-                }
+                },
+                textColor = MaterialTheme.colorScheme.primary,
+                backgroundColor = MaterialTheme.colorScheme.secondary,
+                borderColor = MaterialTheme.colorScheme.primary,
             )
 
             if (showDialog) {
@@ -92,28 +107,45 @@ fun DeviceListScreen(navController: NavController, vm: DeviceListViewModel = hil
             }
         }
 
+        Spacer(Modifier.height(16.dp))
+
         H2("Сенсоры")
+
+        Spacer(Modifier.height(4.dp))
 
         Text("Сенсор света и компас помогут выбрать оптимальное положение для растения в помещении")
 
-        SmartPotButton(
+        Spacer(Modifier.height(16.dp))
+
+        SmartPotButtonSecondary(
             buttonText = "Открыть сенсоры",
             onClickAction = {
                 navController.navigate("sensor") {
                     popUpTo("device_list") { inclusive = true }
                 }
-            }
+            },
+            textColor = MaterialTheme.colorScheme.primary,
+            backgroundColor = MaterialTheme.colorScheme.secondary,
+            borderColor = MaterialTheme.colorScheme.primary,
         )
+
+        Spacer(Modifier.height(16.dp))
 
         H2("Шаблоны")
 
+        Text("Готовые режимы полива")
+
         Tiles(listOf(
-            Tile("", ""),
-            Tile("", ""),
-            Tile("", ""),
+            Tile("\uD83C\uDF35 Кактус", "Раз в неделю", "Лёгкий"),
+            Tile("\uD83C\uDF3F Фикус", "2 раза в день", "Средний"),
+            Tile("\uD83C\uDF38 Орхидея", "Раз в 3 дня", "Сложный"),
         ))
 
+        Spacer(Modifier.height(16.dp))
+
         H2("Параметры")
+
+        Spacer(Modifier.height(8.dp))
 
         SmartPotButton(
             buttonText = "Выйти из аккаунта",
@@ -129,9 +161,15 @@ fun DeviceListScreen(navController: NavController, vm: DeviceListViewModel = hil
 fun DeviceListItem(device: Device, navController: NavController) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.tertiary),
+        colors = CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.tertiary
+        ),
         onClick = {
             navController.navigate(Screen.Device.createRoute(device.id)) {
                 popUpTo(Screen.DeviceList.route) { inclusive = true }
@@ -146,12 +184,12 @@ fun DeviceListItem(device: Device, navController: NavController) {
                 Icons.Filled.Home,
                 contentDescription = device.name,
                 tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(32.dp)
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            Text(device.name, style = MaterialTheme.typography.titleLarge)
+            Text(device.name, style = MaterialTheme.typography.titleMedium)
         }
     }
 }

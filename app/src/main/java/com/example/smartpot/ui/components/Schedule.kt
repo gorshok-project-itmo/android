@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.smartpot.ui.components.control.ScheduleControl
 import com.example.smartpot.ui.kit.SmartPotButton
+import com.example.smartpot.ui.kit.SmartPotButtonSecondary
 import com.example.smartpot.ui.models.DeviceViewModel
 import java.time.DayOfWeek
 import java.time.LocalTime
@@ -38,22 +39,12 @@ fun Schedule(vm: DeviceViewModel) {
     Column(modifier = Modifier.fillMaxWidth()) {
         if (schedule.isEmpty()) {
             Column {
-                Text("Нет расписания", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold))
+                Text("Нет расписания", style = MaterialTheme.typography.titleSmall)
             }
         } else {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text("День недели", modifier = Modifier.weight(0.4f), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold))
-                Text("Начало", modifier = Modifier.weight(0.3f), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold))
-                Text("Конец", modifier = Modifier.weight(0.3f), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold))
-            }
-
-            Column {
                 schedule.values.forEach { entry ->
                     ScheduleControl(
                         scheduleItem = entry,
@@ -75,15 +66,18 @@ fun Schedule(vm: DeviceViewModel) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            SmartPotButton(
-                buttonText = if (schedule.isEmpty()) "Создать расписание" else "Добавить строку",
+            SmartPotButtonSecondary(
+                buttonText = if (schedule.isEmpty()) "Создать расписание" else "Добавить",
                 onClickAction = {
                     vm.postWateringSchedule(
                         startTime = LocalTime.of(15, 0),
                         endTime = LocalTime.of(15, 15),
                         dayOfWeek = DayOfWeek.FRIDAY
                     )
-                }
+                },
+                textColor = MaterialTheme.colorScheme.primary,
+                backgroundColor = MaterialTheme.colorScheme.secondary,
+                borderColor = MaterialTheme.colorScheme.primary,
             )
         }
     }
