@@ -2,7 +2,9 @@ package com.example.smartpot.ui.components.control
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -44,15 +46,16 @@ fun <K> DropdownControl(
             modifier = Modifier
                 .fillMaxWidth()
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                .card(),
+                .card(true),
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(20.dp)
             ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall
                 )
+                Spacer(Modifier.height(6.dp))
                 Text(
                     text = selected?.let { items[it] } ?: placeholder,
                     style = MaterialTheme.typography.bodyLarge,
@@ -64,7 +67,7 @@ fun <K> DropdownControl(
         ExposedDropdownMenu(
             expanded = expanded,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.tertiary, MaterialTheme.shapes.medium),
+                .card(),
             shadowElevation = 2.dp,
             onDismissRequest = { expanded = false },
         ) {

@@ -17,6 +17,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
@@ -36,7 +40,7 @@ fun TextInput(
         placeholder = {
             Text(
                 placeholder,
-                color = Color(0xFF374151),
+                color = MaterialTheme.colorScheme.onTertiary,
                 style = MaterialTheme.typography.bodyMedium
             )
         },
@@ -47,13 +51,14 @@ fun TextInput(
             focusedTextColor = Color.White,
             unfocusedTextColor = Color.White,
             focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
+            unfocusedBorderColor = MaterialTheme.colorScheme.onTertiary
         ),
         textStyle = MaterialTheme.typography.bodyMedium,
         shape = MaterialTheme.shapes.large,
+        singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(64.dp)
     )
 }
 
@@ -64,6 +69,8 @@ fun TextDialog(
     onShowChange: (Boolean) -> Unit,
     onValueChange: (String) -> Unit
 ) {
+    var currentValue by remember { mutableStateOf(value) }
+
     Dialog(onDismissRequest = { onShowChange(false) }) {
         Surface(
             shadowElevation = 4.dp,
@@ -78,8 +85,10 @@ fun TextDialog(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextInput(
-                    value = value,
-                    onValueChange = { onValueChange(it) },
+                    value = currentValue,
+                    onValueChange = {
+                        currentValue = it
+                    },
                     placeholder = title,
                 )
 
@@ -94,7 +103,7 @@ fun TextDialog(
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = {
-                        onValueChange(value)
+                        onValueChange(currentValue)
                         onShowChange(false)
                     }) {
                         Text("ОК")

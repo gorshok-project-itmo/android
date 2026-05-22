@@ -49,7 +49,7 @@ fun SmartPotButton(
 fun SmartPotButtonSecondary(
     modifier: Modifier = Modifier,
     buttonText: String,
-    buttonHeight: Int = 56,
+    buttonHeight: Int = 64,
     textColor: Color = MaterialTheme.colorScheme.onSurface,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     borderColor: Color = MaterialTheme.colorScheme.tertiary,

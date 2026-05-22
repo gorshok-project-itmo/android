@@ -121,9 +121,9 @@ fun LightFillBar(
             modifier = Modifier
                 .width(60.dp)
                 .height(300.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(4.dp),
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.tertiary)
+                .padding(2.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
             val height = 300.dp
@@ -132,7 +132,7 @@ fun LightFillBar(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color(0xFF2A2A2A))
+                    .background(MaterialTheme.colorScheme.surface)
             )
 
             Box(

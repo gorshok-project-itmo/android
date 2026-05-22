@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -35,6 +36,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartpot.ui.theme.background3
+import com.example.smartpot.ui.theme.text1
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -133,7 +136,7 @@ fun CompassDisplay(preferredAngle: Int?) {
 
                     drawContext.canvas.nativeCanvas.apply {
                         val paint = Paint().apply {
-                            color = if (direction == "N") android.graphics.Color.RED
+                            color = if (direction == "N") android.graphics.Color.GREEN
                             else android.graphics.Color.WHITE
                             textSize = 24.dp.toPx()
                             textAlign = Paint.Align.CENTER
@@ -163,7 +166,7 @@ fun CompassDisplay(preferredAngle: Int?) {
                     val endY = centerY + (outerRadius * sin(angle)).toFloat()
 
                     drawLine(
-                        color = Color.Gray,
+                        color = text1,
                         start = Offset(startX, startY),
                         end = Offset(endX, endY),
                         strokeWidth = 2.dp.toPx()

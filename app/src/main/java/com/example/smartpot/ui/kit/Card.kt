@@ -8,13 +8,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Modifier.card(): Modifier = this
+fun Modifier.card(
+    clickable: Boolean = false,
+    accent: Boolean = false,
+    loading: Boolean = false,
+): Modifier = this
     .background(
-    MaterialTheme.colorScheme.surface,
+    if (accent) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surface,
     MaterialTheme.shapes.large,
     )
     .border(
         1.dp,
-        MaterialTheme.colorScheme.tertiary,
+        if (clickable) {
+            if (loading) MaterialTheme.colorScheme.tertiary else
+            if (accent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onTertiary
+        } else MaterialTheme.colorScheme.tertiary,
         MaterialTheme.shapes.large
     )

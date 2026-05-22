@@ -47,7 +47,7 @@ fun SignupScreen(navController: NavController, vm: SignupViewModel = hiltViewMod
         .fillMaxSize()
         .padding(horizontal = 16.dp)
     ) {
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(24.dp))
 
         H2("Регистрация")
 
@@ -60,16 +60,12 @@ fun SignupScreen(navController: NavController, vm: SignupViewModel = hiltViewMod
                 placeholder = "Email"
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
-
             TextInput(
                 value = password,
                 onValueChange = vm::onPasswordChange,
                 placeholder = "Пароль",
                 visualTransformation = PasswordVisualTransformation()
             )
-
-            Spacer(modifier = Modifier.height(4.dp))
 
             TextInput(
                 value = confirmPassword,
@@ -78,7 +74,7 @@ fun SignupScreen(navController: NavController, vm: SignupViewModel = hiltViewMod
                 visualTransformation = PasswordVisualTransformation()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             SmartPotButton(
                 buttonText = if (loading) "Регистрация..." else "Зарегистрироваться",

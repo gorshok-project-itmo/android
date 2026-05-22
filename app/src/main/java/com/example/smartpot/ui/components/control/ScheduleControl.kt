@@ -48,7 +48,7 @@ fun ScheduleControl(
             .fillMaxWidth()
             .height(72.dp)
             .clickable { showPopup = true }
-            .card(),
+            .card(true),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -51,7 +51,7 @@ fun TimeControl(
     }
 
     Surface(
-        modifier = Modifier.fillMaxWidth().card(),
+        modifier = Modifier.fillMaxWidth().card(true),
         onClick = { dialog.show() }
     ) {
         Column(

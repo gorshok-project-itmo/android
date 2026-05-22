@@ -46,7 +46,7 @@ fun LoginScreen(navController: NavController, vm: LoginViewModel = hiltViewModel
         .fillMaxSize()
         .padding(horizontal = 16.dp)
     ) {
-        Spacer(Modifier.height(48.dp))
+        Spacer(Modifier.height(24.dp))
 
         H2("Вход в аккаунт")
 
@@ -59,8 +59,6 @@ fun LoginScreen(navController: NavController, vm: LoginViewModel = hiltViewModel
                 placeholder = "Email"
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
-
             TextInput(
                 value = password,
                 onValueChange = vm::onPasswordChange,
@@ -68,7 +66,7 @@ fun LoginScreen(navController: NavController, vm: LoginViewModel = hiltViewModel
                 visualTransformation = PasswordVisualTransformation()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             SmartPotButton(
                 buttonText = if (loading) "Вход..." else "Войти",

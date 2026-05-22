@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.smartpot.ui.kit.Chip
 import com.example.smartpot.ui.kit.card
 
-data class Tile(val title: String, val subtitle: String, val value: String)
+data class Tile(val title: String, val subtitle: String, val value: String?)
 
 @Composable
 fun Tiles(tiles: List<Tile>) {
@@ -67,9 +67,11 @@ fun Tiles(tiles: List<Tile>) {
                             .padding(24.dp)
                             .weight(0.4f),
                     ) {
-                        Chip(
-                            tile.value,
-                        )
+                        if (tile.value != null) {
+                            Chip(
+                                tile.value,
+                            )
+                        }
                     }
                 }
             }

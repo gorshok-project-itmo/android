@@ -4,6 +4,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.graphics.Color
 
 val text = Color(0xFFEBF4FC)
+val text1 = Color(0xFF8C96A7)
 val text2 = Color(0xFF4B5563)
 val accent = Color(0xFF22C55E)
 val accent2 = Color(0xFF0D2314)
@@ -15,7 +16,7 @@ val danger = Color(0xFFE1452A)
 val lightColors = darkColorScheme(
     primary = accent,
     secondary = accent2,
-    onTertiary = text2,
+    onTertiary = text1,
     background = background,
     onPrimary = text,
     onSecondary = text,

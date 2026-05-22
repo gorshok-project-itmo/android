@@ -43,7 +43,7 @@ fun Schedule(vm: DeviceViewModel) {
             }
         } else {
             Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 schedule.values.forEach { entry ->
                     ScheduleControl(
@@ -62,7 +62,7 @@ fun Schedule(vm: DeviceViewModel) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp),
+                .padding(top = 12.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {

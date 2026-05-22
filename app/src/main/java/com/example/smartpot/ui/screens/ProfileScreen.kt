@@ -17,6 +17,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.smartpot.ui.components.H2
+import com.example.smartpot.ui.components.Tile
+import com.example.smartpot.ui.components.Tiles
 import com.example.smartpot.ui.kit.SmartPotButton
 import com.example.smartpot.ui.models.ProfileViewModel
 
@@ -37,11 +39,19 @@ fun ProfileScreen(navController: NavController, vm: ProfileViewModel = hiltViewM
             .padding(horizontal = 16.dp)
             .verticalScroll(scrollState)
     ) {
+        Spacer(Modifier.height(16.dp))
+
         H2("Профиль")
 
         Spacer(Modifier.height(8.dp))
 
-        Text(vm.email.collectAsStateWithLifecycle().value ?: "not logged in")
+        Tiles(listOf(
+            Tile(
+                title = "Email",
+                subtitle = vm.email.collectAsStateWithLifecycle().value ?: "not logged in",
+                value = null
+            )
+        ))
 
         Spacer(Modifier.height(16.dp))
 

@@ -15,10 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.smartpot.ui.Screen
+import com.example.smartpot.ui.components.Controls
 import com.example.smartpot.ui.components.H2
 import com.example.smartpot.ui.components.Schedule
 import com.example.smartpot.ui.components.Tile
 import com.example.smartpot.ui.components.Tiles
+import com.example.smartpot.ui.components.control.IntControl
+import com.example.smartpot.ui.components.control.ToggleInput
 import com.example.smartpot.ui.kit.BackButton
 import com.example.smartpot.ui.models.DeviceViewModel
 
@@ -38,7 +41,7 @@ fun DeviceScreen(navController: NavController, deviceId: String, vm: DeviceViewM
             .padding(horizontal = 16.dp)
             .verticalScroll(scrollState)
     ) {
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
 
         BackButton(
             buttonText = "Ко всем устройствам",
@@ -68,6 +71,13 @@ fun DeviceScreen(navController: NavController, deviceId: String, vm: DeviceViewM
                     "${((device.humidityThreshold * 100).toInt())}%"
                 )
             )
+        )
+
+        ToggleInput(
+            title = "Статус полива",
+            subtitleEnabled = "Идёт сейчас. Нажмите, чтобы выключить",
+            subtitleDisabled = "Не идёт. Нажмите, чтобы включить",
+            subtitleLoading = "Включение..."
         )
 
 //        H2("Настройки")

@@ -128,14 +128,21 @@ fun DeviceListScreen(navController: NavController, vm: DeviceListViewModel = hil
 
         if (showDialog) {
             if (newDevice != null) {
-                TextDialog(
-                    title = "Добавить устройство",
-                    value = "MyDevice",
-                    onShowChange = { showDialog = it },
-                    onValueChange = {
-                        vm.addDevice(it, newId.value)
-                    }
-                )
+                if (devices.contains(newDevice!!.id)) {
+                    SimpleDialog(
+                        title = "Это устройство уже добавлено",
+                        onShowChange = { showDialog = it },
+                    )
+                } else {
+                    TextDialog(
+                        title = "Добавить устройство",
+                        value = "MyDevice",
+                        onShowChange = { showDialog = it },
+                        onValueChange = {
+                            vm.addDevice(it, newId.value)
+                        }
+                    )
+                }
             } else {
                 SimpleDialog(
                     title = "Устройство не найдено",
