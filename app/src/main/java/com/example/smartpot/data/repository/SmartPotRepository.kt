@@ -12,12 +12,13 @@ class SmartPotRepository(private val api: SmartPotApi) {
     suspend fun deleteLogout() = api.deleteLogout()
     suspend fun getDevices() = api.getDevices()
     suspend fun postDevices(request: DeviceRequest) = api.postDevices(request)
-    suspend fun getDevice(deviceId: Int) = api.getDevice(deviceId)
-    suspend fun getDeviceWateringStatus(deviceId: Int) = api.getDeviceWateringStatus(deviceId)
-    suspend fun postDeviceTriggerWatering(deviceId: Int) = api.postDeviceTriggerWatering(deviceId)
+    suspend fun getDevice(deviceId: String) = api.getDevice(deviceId)
+    suspend fun getNewDevice(deviceId: String) = api.getNewDevice(deviceId)
+    suspend fun getDeviceWateringStatus(deviceId: String) = api.getDeviceWateringStatus(deviceId)
+    suspend fun postDeviceTriggerWatering(deviceId: String) = api.postDeviceTriggerWatering(deviceId)
 
 
-    suspend fun getWateringSchedules(deviceId: Int) = api.getWateringSchedules(deviceId)
+    suspend fun getWateringSchedules(deviceId: String) = api.getWateringSchedules(deviceId)
     suspend fun postWateringSchedule(request: WateringScheduleRequest) = api.postWateringSchedule(request)
     suspend fun getWateringSchedule(scheduleId: Int) = api.getWateringSchedule(scheduleId)
     suspend fun putWateringSchedule(scheduleId: Int, request: WateringScheduleRequest) = api.putWateringSchedule(scheduleId, request)

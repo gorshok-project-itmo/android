@@ -24,45 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun TextInput(
-    value: String,
-    onValueChange: (v: String) -> Unit,
-    placeholder: String,
-    visualTransformation: VisualTransformation = VisualTransformation.None
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = {
-            Text(
-                placeholder,
-                color = Color(0xFF374151),
-                style = MaterialTheme.typography.bodyMedium
-            )
-        },
-        visualTransformation = visualTransformation,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedTextColor = Color.White,
-            unfocusedTextColor = Color.White,
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
-        ),
-        textStyle = MaterialTheme.typography.bodyMedium,
-        shape = MaterialTheme.shapes.large,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-    )
-}
-
-@Composable
-fun TextDialog(
+fun SimpleDialog(
     title: String,
-    value: String,
     onShowChange: (Boolean) -> Unit,
-    onValueChange: (String) -> Unit
 ) {
     Dialog(onDismissRequest = { onShowChange(false) }) {
         Surface(
@@ -76,25 +40,12 @@ fun TextDialog(
                 Text(text = title, style = MaterialTheme.typography.titleMedium)
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                TextInput(
-                    value = value,
-                    onValueChange = { onValueChange(it) },
-                    placeholder = title,
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
                 
                 Row(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    TextButton(onClick = { onShowChange(false) }) {
-                        Text("Отмена")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = {
-                        onValueChange(value)
                         onShowChange(false)
                     }) {
                         Text("ОК")

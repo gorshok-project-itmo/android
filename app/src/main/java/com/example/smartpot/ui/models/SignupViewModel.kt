@@ -68,6 +68,8 @@ class SignupViewModel @Inject constructor(private val repo: SmartPotRepository, 
                 val token = resp.body()!!.status.token
 
                 tokenRepo.saveToken(token)
+                tokenRepo.saveEmail(e)
+
                 _signedInEvent.emit(Unit)
             } catch (e: Throwable) {
                 _error.value = e.message ?: "Ошибка сети"

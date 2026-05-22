@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -17,12 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.smartpot.ui.Screen
 import com.example.smartpot.ui.components.H2
 import com.example.smartpot.ui.components.control.DropdownControl
 import com.example.smartpot.ui.components.sensor.CompassDisplay
 import com.example.smartpot.ui.components.sensor.LightDisplay
-import com.example.smartpot.ui.kit.BackButton
 import com.example.smartpot.ui.models.DeviceViewModel
 import com.example.smartpot.util.Plant
 import com.example.smartpot.util.plants
@@ -36,18 +36,18 @@ fun SensorScreen(navController: NavController, vm: DeviceViewModel = hiltViewMod
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(horizontal = 16.dp)
             .verticalScroll(scrollState)
     ) {
         Spacer(Modifier.height(16.dp))
 
-        BackButton(
-            buttonText = "К списку устройств",
-            route = Screen.DeviceList.route,
-            popUpTo = Screen.Sensor.route,
-            navController = navController
-        )
-
         H2("Сенсоры")
+
+        Spacer(Modifier.height(4.dp))
+
+        Text("Сенсор света и компас помогут выбрать оптимальное положение для растения в помещении")
+
+        Spacer(Modifier.height(16.dp))
 
         DropdownControl(
             "Вид растения",

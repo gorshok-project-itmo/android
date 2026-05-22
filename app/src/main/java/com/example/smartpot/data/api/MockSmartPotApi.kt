@@ -7,7 +7,7 @@ import kotlin.random.Random
 class MockSmartPotApi(
     private val delayMs: Long = 200L
 ) : SmartPotApi {
-    private val devices = mutableMapOf<Int, Device>()
+    private val devices = mutableMapOf<String, Device>()
     private val schedules = mutableMapOf<Int, WateringScheduleItem>()
     private var token: String? = null
 
@@ -70,10 +70,8 @@ class MockSmartPotApi(
     override suspend fun postDevices(request: DeviceRequest): Response<Device> {
         delay(delayMs)
 
-        val id = Random.nextInt()
-
         val device = Device(
-            id = id,
+            id = request.id,
             name = request.name,
             mode = request.mode,
             intervalHours = request.intervalHours,
@@ -85,7 +83,7 @@ class MockSmartPotApi(
             updatedAt = ""
         )
 
-        devices[id] = device
+        devices[device.id] = device
 
         return Response.success(device)
     }
@@ -97,14 +95,37 @@ class MockSmartPotApi(
         return makeResponse(resp)
     }
 
-    override suspend fun getDevice(deviceId: Int): Response<Device> {
+    override suspend fun getDevice(deviceId: String): Response<Device> {
         delay(delayMs)
         val resp = this.devices[deviceId]
 
         return makeResponse(resp!!)
     }
 
-    override suspend fun getDeviceWateringStatus(deviceId: Int): Response<WateringStatus> {
+    override suspend fun getNewDevice(deviceId: String): Response<Device?> {
+        delay(delayMs)
+
+        if (Regex("""esp32_\d{12}""").matches(deviceId.trim())) {
+            return makeResponse(
+                Device(
+                    id = deviceId,
+                    name = "MyDevice",
+                    mode = "",
+                    intervalHours = 6,
+                    durationMinutes = 30,
+                    humidityThreshold = 0.2,
+                    waterLevel = 0.5,
+                    userId = 1,
+                    createdAt = "",
+                    updatedAt = "",
+                )
+            )
+        }
+
+        return makeResponse(null)
+    }
+
+    override suspend fun getDeviceWateringStatus(deviceId: String): Response<WateringStatus> {
         delay(delayMs)
         val device = devices[deviceId]!!
 
@@ -119,7 +140,7 @@ class MockSmartPotApi(
         return makeResponse(resp)
     }
 
-    override suspend fun postDeviceTriggerWatering(deviceId: Int): Response<DeviceTriggerWateringResponse> {
+    override suspend fun postDeviceTriggerWatering(deviceId: String): Response<DeviceTriggerWateringResponse> {
         TODO()
 //        delay(delayMs)
 //        return DeviceTriggerWateringResponse(
@@ -129,7 +150,7 @@ class MockSmartPotApi(
 //        )
     }
 
-    override suspend fun getWateringSchedules(deviceId: Int): Response<List<WateringScheduleItem>> {
+    override suspend fun getWateringSchedules(deviceId: String): Response<List<WateringScheduleItem>> {
         delay(delayMs)
 
         val resp = schedules.filter { it.value.deviceId == deviceId }.toList().map {

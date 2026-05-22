@@ -4,13 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +22,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.smartpot.ui.components.Form
 import com.example.smartpot.ui.components.H2
-import com.example.smartpot.ui.components.form.TextInput
+import com.example.smartpot.ui.components.control.TextInput
 import com.example.smartpot.ui.kit.SmartPotButton
 import com.example.smartpot.ui.kit.SmartPotButtonSecondary
 import com.example.smartpot.ui.models.SignupViewModel
@@ -41,13 +37,16 @@ fun SignupScreen(navController: NavController, vm: SignupViewModel = hiltViewMod
 
     LaunchedEffect(vm) {
         vm.signedInEvent.collect { token ->
-            navController.navigate("device_list") {
+            navController.navigate("home") {
                 popUpTo("signup") { inclusive = true }
             }
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 16.dp)
+    ) {
         Spacer(Modifier.height(16.dp))
 
         H2("Регистрация")

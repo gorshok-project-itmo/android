@@ -21,16 +21,19 @@ class RealSmartPotApi(
     override suspend fun getDevices(): Response<List<Device>> =
         service.getDevices()
 
-    override suspend fun getDevice(deviceId: Int): Response<Device> =
+    override suspend fun getDevice(deviceId: String): Response<Device> =
         service.getDevice(deviceId)
 
-    override suspend fun getDeviceWateringStatus(deviceId: Int): Response<WateringStatus> =
+    override suspend fun getNewDevice(deviceId: String): Response<Device?> =
+        service.getNewDevice(deviceId)
+
+    override suspend fun getDeviceWateringStatus(deviceId: String): Response<WateringStatus> =
         service.getDeviceWateringStatus(deviceId)
 
-    override suspend fun postDeviceTriggerWatering(deviceId: Int): Response<DeviceTriggerWateringResponse> =
+    override suspend fun postDeviceTriggerWatering(deviceId: String): Response<DeviceTriggerWateringResponse> =
         service.postDeviceTriggerWatering(deviceId)
 
-    override suspend fun getWateringSchedules(deviceId: Int): Response<List<WateringScheduleItem>> =
+    override suspend fun getWateringSchedules(deviceId: String): Response<List<WateringScheduleItem>> =
         service.getWateringSchedules(deviceId)
 
     override suspend fun postWateringSchedule(request: WateringScheduleRequest): Response<WateringScheduleItem> =

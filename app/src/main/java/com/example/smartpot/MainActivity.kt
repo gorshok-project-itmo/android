@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.smartpot.ui.Screen
 import com.example.smartpot.ui.models.LaunchState
@@ -30,6 +31,7 @@ import com.example.smartpot.ui.screens.DeviceListScreen
 import com.example.smartpot.ui.screens.DeviceScreen
 import com.example.smartpot.ui.screens.HomeScreen
 import com.example.smartpot.ui.screens.LoginScreen
+import com.example.smartpot.ui.screens.ProfileScreen
 import com.example.smartpot.ui.screens.SensorScreen
 import com.example.smartpot.ui.screens.SignupScreen
 import com.example.smartpot.ui.screens.SplashScreen
@@ -62,7 +64,7 @@ class MainActivity : ComponentActivity() {
                 ?.let { state ->
                     when (state) {
                         is LaunchState.SignedIn -> {
-                            navController.navigate(Screen.DeviceList.route) {
+                            navController.navigate(Screen.Home.route) {
                                 popUpTo(navController.graph.startDestinationId) { inclusive = true }
                             }
                         }
@@ -91,19 +93,26 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = Screen.Splash.route,
-                        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
                     ) {
-                        composable(Screen.Home.route) {
-                            HomeScreen(navController, launchViewModel)
-                        }
+                        navigation(
+                            startDestination = Screen.HomeTabs.main,
+                            route = Screen.Home.route
+                        ) {
+                            composable(Screen.HomeTabs.main) {
+                                HomeScreen(navController, 0)
+                            }
 
-                        composable(Screen.DeviceList.route) {
-                            DeviceListScreen(navController)
+                            composable(Screen.HomeTabs.sensor) {
+                                HomeScreen(navController, 1)
+                            }
+
+                            composable(Screen.HomeTabs.profile) {
+                                HomeScreen(navController, 2)
+                            }
                         }
 
                         composable(Screen.Device.route) { backStackEntry ->
-                            val idArg = backStackEntry.arguments?.getString("id")
-                            val id = idArg?.toIntOrNull() ?: -1
+                            val id = backStackEntry.arguments?.getString("id") ?: ""
                             DeviceScreen(navController, id)
                         }
 
@@ -117,10 +126,6 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.Splash.route) {
                             SplashScreen(navController)
-                        }
-
-                        composable(Screen.Sensor.route) {
-                            SensorScreen(navController)
                         }
                     }
                 }

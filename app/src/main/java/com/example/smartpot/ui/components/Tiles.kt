@@ -28,7 +28,7 @@ fun Tiles(tiles: List<Tile>) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         for (tile in tiles) {
             Box(

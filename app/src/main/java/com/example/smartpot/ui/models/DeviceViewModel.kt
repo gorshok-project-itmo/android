@@ -32,7 +32,7 @@ class DeviceViewModel @Inject constructor(private val repo: SmartPotRepository) 
     private val _schedule = MutableStateFlow(WaterScheduleState())
     val schedule: StateFlow<WaterScheduleState> = _schedule
 
-    fun getDevice(deviceId: Int) = viewModelScope.launch {
+    fun getDevice(deviceId: String) = viewModelScope.launch {
         val resp = repo.getDevice(deviceId)
 
         if (!resp.isSuccessful) {
@@ -64,7 +64,7 @@ class DeviceViewModel @Inject constructor(private val repo: SmartPotRepository) 
         val resp = repo.postDeviceTriggerWatering(device.value!!.device.id)
     }
 
-    fun getWateringSchedules(deviceId: Int) = viewModelScope.launch {
+    fun getWateringSchedules(deviceId: String) = viewModelScope.launch {
         val resp = repo.getWateringSchedules(deviceId)
 
         if (!resp.isSuccessful) {

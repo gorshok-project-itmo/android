@@ -25,19 +25,22 @@ interface SmartPotRetrofitService {
     suspend fun getDevices(): Response<List<Device>>
 
     @GET("devices/{id}")
-    suspend fun getDevice(@Path("id") deviceId: Int): Response<Device>
+    suspend fun getDevice(@Path("id") deviceId: String): Response<Device>
+
+    @GET("new_device/{id}")
+    suspend fun getNewDevice(@Path("id") deviceId: String): Response<Device?>
 
     @GET("devices/{id}/watering_status")
-    suspend fun getDeviceWateringStatus(@Path("id") deviceId: Int): Response<WateringStatus>
+    suspend fun getDeviceWateringStatus(@Path("id") deviceId: String): Response<WateringStatus>
 
     @POST("devices/{id}/trigger_watering")
-    suspend fun postDeviceTriggerWatering(@Path("id") deviceId: Int): Response<DeviceTriggerWateringResponse>
+    suspend fun postDeviceTriggerWatering(@Path("id") deviceId: String): Response<DeviceTriggerWateringResponse>
 
     @GET("devices/{id}/watering_schedules")
-    suspend fun getWateringSchedules(@Path("id") deviceId: Int): Response<List<WateringScheduleItem>>
+    suspend fun getWateringSchedules(@Path("id") deviceId: String): Response<List<WateringScheduleItem>>
 
     @POST("devices/{id}/watering_schedules")
-    suspend fun postWateringSchedule(@Path("id") deviceId: Int, @Body request: WateringScheduleRequest): Response<WateringScheduleItem>
+    suspend fun postWateringSchedule(@Path("id") deviceId: String, @Body request: WateringScheduleRequest): Response<WateringScheduleItem>
 
     @GET("watering_schedules/{id}")
     suspend fun getWateringSchedule(@Path("id") scheduleId: Int): Response<WateringScheduleItem>

@@ -19,6 +19,7 @@ data class DeviceTriggerWateringResponse(
 
 @Serializable
 data class DeviceRequest(
+    val id: String,
     val name: String,
     val mode: String,
     val intervalHours: Int,
@@ -29,7 +30,7 @@ data class DeviceRequest(
 
 @Serializable
 data class Device(
-    val id: Int,
+    val id: String,
     val name: String,
     val mode: String,
     val intervalHours: Int,
@@ -88,7 +89,7 @@ data class LogoutResponse(
 
 @Serializable
 data class WateringScheduleRequestData(
-    val deviceId: Int,
+    val deviceId: String,
     @Serializable(with = DayOfWeekSerializer::class) val dayOfWeek: DayOfWeek,
     @Contextual val startTime: LocalTime,
     @Contextual val endTime: LocalTime,
@@ -103,7 +104,7 @@ data class WateringScheduleRequest(
 @Serializable
 data class WateringScheduleItem(
     val id: Int,
-    val deviceId: Int,
+    val deviceId: String,
     @Serializable(with = DayOfWeekSerializer::class) val dayOfWeek: DayOfWeek,
     @Contextual val startTime: LocalTime,
     @Contextual val endTime: LocalTime,
@@ -118,11 +119,12 @@ interface SmartPotApi {
     suspend fun deleteLogout(): Response<LogoutResponse>
     suspend fun postDevices(request: DeviceRequest): Response<Device>
     suspend fun getDevices(): Response<List<Device>>
-    suspend fun getDevice(deviceId: Int): Response<Device>
-    suspend fun getDeviceWateringStatus(deviceId: Int): Response<WateringStatus>
-    suspend fun postDeviceTriggerWatering(deviceId: Int): Response<DeviceTriggerWateringResponse>
+    suspend fun getDevice(deviceId: String): Response<Device>
+    suspend fun getNewDevice(deviceId: String): Response<Device?>
+    suspend fun getDeviceWateringStatus(deviceId: String): Response<WateringStatus>
+    suspend fun postDeviceTriggerWatering(deviceId: String): Response<DeviceTriggerWateringResponse>
 
-    suspend fun getWateringSchedules(deviceId: Int): Response<List<WateringScheduleItem>>
+    suspend fun getWateringSchedules(deviceId: String): Response<List<WateringScheduleItem>>
     suspend fun postWateringSchedule(request: WateringScheduleRequest): Response<WateringScheduleItem>
     suspend fun getWateringSchedule(scheduleId: Int): Response<WateringScheduleItem>
     suspend fun putWateringSchedule(scheduleId: Int, request: WateringScheduleRequest): Response<WateringScheduleItem>
